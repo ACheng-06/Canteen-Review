@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { dishes } from '../mock'
 import type { RankPeriod, RankCategory } from '../types'
@@ -18,6 +18,10 @@ export default function RankingPage() {
   const navigate = useNavigate()
   const [period, setPeriod] = useState<RankPeriod>('today')
   const [category, setCategory] = useState<RankCategory>('popularity')
+  const [page, setPage] = useState(1)
+  const pageSize = 8
+
+  useEffect(() => { setPage(1) }, [period, category])
 
   const sorted = useMemo(() => {
     const key =
@@ -33,6 +37,8 @@ export default function RankingPage() {
 
   const top3 = sorted.slice(0, 3)
   const rest = sorted.slice(3)
+  const totalPages = Math.ceil(rest.length / pageSize)
+  const paginatedRest = rest.slice((page - 1) * pageSize, page * pageSize)
 
   const rankLabels = ['🥇', '🥈', '🥉']
   const rankShadows = ['#FFCF7A', '#E0E0E0', '#D7CCC8']
@@ -147,41 +153,88 @@ export default function RankingPage() {
           background: 'white',
         }}
       >
-        {rest.map((dish, i) => (
-          <div
-            key={dish.id}
-            onClick={() => navigate(`/dishes/${dish.id}`)}
-            className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors"
-            style={{
-              borderBottom: i < rest.length - 1 ? '2px solid #F5F6FA' : 'none',
-              background: i % 2 === 0 ? 'white' : 'var(--color-paper)',
-            }}
-          >
-            <span
-              className="w-6 h-6 flex items-center justify-center text-xs font-black rounded"
+        {paginatedRest.map((dish, i) => {
+          const rank = (page - 1) * pageSize + i + 4
+          return (
+            <div
+              key={dish.id}
+              onClick={() => navigate(`/dishes/${dish.id}`)}
+              className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors"
               style={{
-                background: i < 3 ? '#FFC107' : 'var(--color-bg)',
-                border: '2px solid var(--color-ink)',
+                borderBottom: i < paginatedRest.length - 1 ? '2px solid #F5F6FA' : 'none',
+                background: i % 2 === 0 ? 'white' : 'var(--color-paper)',
               }}
             >
-              {i + 4}
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm truncate">{dish.name}</div>
-              <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                ⭐ {dish.rating.toFixed(1)} · ¥{dish.price}
+              <span
+                className="w-6 h-6 flex items-center justify-center text-xs font-black rounded"
+                style={{
+                  background: 'var(--color-bg)',
+                  border: '2px solid var(--color-ink)',
+                }}
+              >
+                {rank}
+              </span>
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-sm truncate">{dish.name}</div>
+                <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                  ⭐ {dish.rating.toFixed(1)} · ¥{dish.price}
+                </div>
+              </div>
+              <div className="text-sm font-black" style={{ color: 'var(--color-blue)' }}>
+                {category === 'popularity'
+                  ? dish.popularity
+                  : category === 'speed'
+                    ? dish.speedScore.toFixed(1)
+                    : dish.valueScore.toFixed(1)}
               </div>
             </div>
-            <div className="text-sm font-black" style={{ color: 'var(--color-blue)' }}>
-              {category === 'popularity'
-                ? dish.popularity
-                : category === 'speed'
-                  ? dish.speedScore.toFixed(1)
-                  : dish.valueScore.toFixed(1)}
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-3 mt-4">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.97] disabled:opacity-40"
+            style={{
+              background: '#172033',
+              color: 'white',
+              border: '3px solid var(--color-ink)',
+              borderRadius: '14px',
+              boxShadow: '4px 4px 0 var(--color-shadow-blue)',
+            }}
+          >
+            上一页
+          </button>
+          <span
+            className="px-3 py-1 text-sm font-bold"
+            style={{
+              background: 'var(--color-soft-amber)',
+              border: '2px solid var(--color-ink)',
+              borderRadius: '10px',
+            }}
+          >
+            {page} / {totalPages}
+          </span>
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.97] disabled:opacity-40"
+            style={{
+              background: '#172033',
+              color: 'white',
+              border: '3px solid var(--color-ink)',
+              borderRadius: '14px',
+              boxShadow: '4px 4px 0 var(--color-shadow-blue)',
+            }}
+          >
+            下一页
+          </button>
+        </div>
+      )}
     </div>
   )
 }
