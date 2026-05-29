@@ -1,10 +1,6 @@
-function App() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-ink">Canteen Review</h1>
-      <p className="text-muted mt-2">Coming soon...</p>
-    </div>
-  )
-}
+import { RouterProvider } from 'react-router-dom'
+import { router } from './router'
 
-export default App
+export default function App() {
+  return <RouterProvider router={router} />
+}
