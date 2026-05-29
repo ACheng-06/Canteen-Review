@@ -15,12 +15,12 @@ export const windows: Window[] = [
   {
     id: 'w3', canteenId: 'c1', name: '小吃窗口', floor: 2,
     description: '煎饼果子、烤冷面、炸串', status: 'open',
-    tags: ['小吃', '快捷'], dishIds: ['d8', 'd9', 'd10'],
+    tags: ['小吃', '快捷'], dishIds: ['d8', 'd9', 'd10', 'd29'],
   },
   {
     id: 'w4', canteenId: 'c1', name: '饮品窗口', floor: 2,
     description: '鲜榨果汁、奶茶、豆浆', status: 'open',
-    tags: ['饮品', '鲜榨'], dishIds: ['d11', 'd12'],
+    tags: ['饮品', '鲜榨'], dishIds: ['d11', 'd12', 'd30'],
   },
   // 二餐厅
   {

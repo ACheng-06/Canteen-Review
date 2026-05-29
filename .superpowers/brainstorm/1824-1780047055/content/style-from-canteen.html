@@ -1,0 +1,68 @@
+<h2>参考小程序后的视觉方向</h2>
+<p class="subtitle">我按 Canteen 小程序的风格提炼了 3 种迁移方式。重点是粗黑描边、彩色错位阴影、贴纸标签、浅米色背景和漫画波点。</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="width:230px;margin:auto;background:linear-gradient(180deg,#fff8e8 0%,#f7f8fa 45%);border-radius:30px;padding:14px;font-family:system-ui;color:#172033;box-shadow:0 10px 30px rgba(23,32,51,.12);">
+        <div style="background:#fff;border:3px solid #172033;border-radius:18px;padding:14px;box-shadow:7px 7px 0 #dce7f5;position:relative;overflow:hidden;">
+          <div style="position:absolute;right:12px;top:-8px;background:#ff4fb8;color:#fff;border:2px solid #172033;border-radius:6px;padding:2px 8px;font-size:10px;font-weight:900;transform:rotate(6deg);">HOT</div>
+          <div style="font-size:12px;color:#6b4e16;font-weight:800;">午餐推荐</div>
+          <div style="font-size:24px;font-weight:900;text-shadow:2px 2px 0 #ffe14d,4px 4px 0 rgba(255,79,184,.25);">今天吃什么？</div>
+          <div style="margin-top:12px;background:#fff;border:2px solid #172033;border-radius:14px;padding:8px;box-shadow:4px 4px 0 #eaf3ff;color:#8a93a3;font-size:12px;">搜索菜品 / 食堂</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;">
+          <div style="background:#fff;border:2px solid #172033;border-radius:14px;padding:10px 4px;text-align:center;box-shadow:4px 4px 0 #dce7f5;font-size:12px;font-weight:800;">热菜</div>
+          <div style="background:#fff;border:2px solid #172033;border-radius:14px;padding:10px 4px;text-align:center;box-shadow:4px 4px 0 #ddf3e8;font-size:12px;font-weight:800;">面食</div>
+          <div style="background:#fff;border:2px solid #172033;border-radius:14px;padding:10px 4px;text-align:center;box-shadow:4px 4px 0 #ffe4a8;font-size:12px;font-weight:800;">饮品</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 高还原漫画波普</h3>
+      <p>最大程度复用小程序气质：粗描边、贴纸、波点、强阴影。视觉最像原项目，但实现细节最多。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="width:230px;margin:auto;background:#f7f8fa;border-radius:30px;padding:14px;font-family:system-ui;color:#172033;box-shadow:0 10px 30px rgba(23,32,51,.10);">
+        <div style="background:#fffdf7;border:2px solid #172033;border-radius:20px;padding:14px;box-shadow:5px 5px 0 #e5ecf5;">
+          <div style="font-size:12px;color:#8a93a3;font-weight:700;">校园食堂</div>
+          <div style="font-size:22px;font-weight:900;text-shadow:2px 2px 0 #ffe4a8;">好吃榜单</div>
+          <div style="display:flex;gap:6px;margin-top:12px;">
+            <span style="border:2px solid #172033;border-radius:999px;background:#fff7e8;padding:4px 8px;font-size:11px;font-weight:800;">15元以内</span>
+            <span style="border:2px solid #172033;border-radius:999px;background:#eaf3ff;padding:4px 8px;font-size:11px;font-weight:800;">出餐快</span>
+          </div>
+        </div>
+        <div style="background:#fff;border:2px solid #172033;border-radius:18px;padding:12px;margin-top:12px;box-shadow:5px 5px 0 #dce7f5;display:flex;align-items:center;gap:10px;">
+          <div style="width:42px;height:42px;border-radius:14px;background:#1677ff;border:2px solid #172033;box-shadow:3px 3px 0 #ffe14d;color:white;display:flex;align-items:center;justify-content:center;font-weight:900;">一</div>
+          <div><div style="font-weight:900;">一餐厅</div><div style="font-size:11px;color:#8a93a3;">开放中 · 12个窗口</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 网页轻量复刻</h3>
+      <p>保留核心识别度，但减少装饰。更适合第一阶段快速做出可调 UI；我推荐这个。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="width:230px;margin:auto;background:#f8fafc;border-radius:30px;padding:14px;font-family:system-ui;color:#172033;box-shadow:0 10px 30px rgba(23,32,51,.08);">
+        <div style="background:linear-gradient(135deg,#172033,#245477,#00c2ff);border-radius:22px;padding:16px;color:white;box-shadow:0 8px 22px rgba(23,32,51,.18);">
+          <div style="font-size:12px;opacity:.75;">AI 观察</div>
+          <div style="font-size:22px;font-weight:900;">今日食堂趋势</div>
+        </div>
+        <div style="background:white;border-radius:18px;padding:12px;margin-top:12px;box-shadow:0 6px 18px rgba(0,0,0,.06);display:flex;justify-content:space-between;">
+          <div><div style="font-weight:800;">黄焖鸡米饭</div><div style="font-size:11px;color:#8a93a3;">二餐厅 · 4.8分</div></div>
+          <div style="color:#1677ff;font-weight:900;">#1</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 混合现代 App</h3>
+      <p>把小程序颜色拿来用，但弱化漫画描边。更现代，但会丢掉你喜欢的原味。</p>
+    </div>
+  </div>
+</div>

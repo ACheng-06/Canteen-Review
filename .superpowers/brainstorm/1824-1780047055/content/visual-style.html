@@ -1,0 +1,65 @@
+<h2>第一阶段 UI 风格方向</h2>
+<p class="subtitle">你选 A 纯前端演示版很合适：先快速看到页面，再反复调 UI。下面先选一个整体视觉方向。</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="width:210px;margin:auto;border-radius:28px;background:#fff7ed;padding:16px;box-shadow:0 12px 28px rgba(249,115,22,.18);font-family:system-ui;">
+        <div style="height:28px;border-radius:999px;background:white;margin-bottom:14px;color:#fb923c;padding:6px 12px;font-size:12px;box-shadow:0 4px 10px rgba(0,0,0,.05);">搜索菜品 / 食堂</div>
+        <div style="background:linear-gradient(135deg,#fb923c,#facc15);border-radius:22px;padding:14px;color:white;margin-bottom:12px;">
+          <div style="font-size:18px;font-weight:800;">今天吃什么？</div>
+          <div style="font-size:11px;opacity:.9;">饭点推荐 · 同学好评</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:white;border-radius:16px;padding:12px;font-size:12px;">一餐厅<br><b>开放中</b></div>
+          <div style="background:white;border-radius:16px;padding:12px;font-size:12px;">热菜榜<br><b>4.8分</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 活泼校园橙</h3>
+      <p>温暖、食欲感强，适合校园食堂点评；推荐作为默认方向。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="width:210px;margin:auto;border-radius:28px;background:#f8fafc;padding:16px;box-shadow:0 12px 28px rgba(15,23,42,.10);font-family:system-ui;">
+        <div style="height:28px;border-radius:12px;background:white;margin-bottom:14px;color:#64748b;padding:6px 12px;font-size:12px;border:1px solid #e2e8f0;">Search</div>
+        <div style="background:white;border:1px solid #e2e8f0;border-radius:20px;padding:14px;color:#0f172a;margin-bottom:12px;">
+          <div style="font-size:18px;font-weight:800;">校园食堂</div>
+          <div style="font-size:11px;color:#64748b;">清爽信息流 · 更像工具 App</div>
+        </div>
+        <div style="display:grid;gap:8px;">
+          <div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:10px;font-size:12px;">民族餐厅 · 32 个菜品</div>
+          <div style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:10px;font-size:12px;">二餐厅 · 4.6 分</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 清爽极简白</h3>
+      <p>更干净、信息密度高，但年轻活泼感弱一些。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="width:210px;margin:auto;border-radius:28px;background:#fdf2f8;padding:16px;box-shadow:0 12px 28px rgba(236,72,153,.14);font-family:system-ui;">
+        <div style="height:28px;border-radius:999px;background:white;margin-bottom:14px;color:#db2777;padding:6px 12px;font-size:12px;">发现好吃的</div>
+        <div style="background:linear-gradient(135deg,#ec4899,#8b5cf6);border-radius:22px;padding:14px;color:white;margin-bottom:12px;">
+          <div style="font-size:18px;font-weight:800;">同学都在吃</div>
+          <div style="font-size:11px;opacity:.9;">热门评价 · AI 观察</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;background:white;border-radius:16px;padding:10px;font-size:12px;">收藏</div>
+          <div style="flex:1;background:white;border-radius:16px;padding:10px;font-size:12px;">排行</div>
+          <div style="flex:1;background:white;border-radius:16px;padding:10px;font-size:12px;">评价</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. 社交潮流粉紫</h3>
+      <p>更像年轻社区产品，视觉记忆点强，但可能不如橙色贴近“食堂”。</p>
+    </div>
+  </div>
+</div>

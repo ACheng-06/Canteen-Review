@@ -31,7 +31,14 @@ export default function RankingPage() {
           ? 'speedScore'
           : 'valueScore'
     const list = [...dishes]
-    list.sort((a, b) => b[key] - a[key])
+    list.sort((a, b) => {
+      const diff = b[key] - a[key]
+      // Week rankings factor in review count as tiebreaker
+      if (period === 'week') {
+        return diff !== 0 ? diff : b.reviewCount - a.reviewCount
+      }
+      return diff
+    })
     return list
   }, [period, category])
 

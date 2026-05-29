@@ -15,11 +15,13 @@ export default function StarRating({
   interactive = false,
   onChange,
 }: StarRatingProps) {
+  const rounded = Math.round(rating * 2) / 2 // Round to nearest 0.5
+
   return (
     <div className={`flex items-center gap-0.5 ${sizeMap[size]}`}>
       {Array.from({ length: max }, (_, i) => {
-        const filled = i < Math.floor(rating)
-        const half = !filled && i < rating
+        const filled = i < Math.floor(rounded)
+        const half = !filled && rounded > i && rounded < i + 1
         return (
           <button
             key={i}
@@ -29,7 +31,7 @@ export default function StarRating({
             className={`${interactive ? 'cursor-pointer hover:scale-110' : 'cursor-default'} transition-transform`}
             style={{ background: 'none', border: 'none', padding: 0 }}
           >
-            {filled ? '⭐' : half ? '🌟' : '☆'}
+            {filled ? '⭐' : half ? '✨' : '☆'}
           </button>
         )
       })}
