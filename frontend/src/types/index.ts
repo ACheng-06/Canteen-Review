@@ -50,6 +50,7 @@ export type DishCategory =
   | '小吃'
   | '水果'
   | '饮品'
+  | '甜品'
 
 /** 评价 */
 export interface Review {

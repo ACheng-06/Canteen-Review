@@ -39,4 +39,7 @@ export const dishes: Dish[] = [
   // ---- 民族餐厅 · 特色菜窗口 ----
   { id: 'd27', windowId: 'w10', canteenId: 'c3', name: '大盘鸡', category: '热菜', price: 25, description: '鸡肉软烂，土豆绵密，配皮带面', image: '/images/dish-placeholder.svg', rating: 4.7, reviewCount: 50, speedScore: 3.2, valueScore: 4.0, popularity: 93, tags: ['新疆', '招牌', '量大'] },
   { id: 'd28', windowId: 'w10', canteenId: 'c3', name: '手抓饭', category: '面食', price: 16, description: '羊肉手抓饭，油香四溢', image: '/images/dish-placeholder.svg', rating: 4.5, reviewCount: 35, speedScore: 3.5, valueScore: 4.2, popularity: 80, tags: ['新疆', '特色'] },
+  // ---- 甜品 ----
+  { id: 'd29', windowId: 'w3', canteenId: 'c1', name: '红豆双皮奶', category: '甜品', price: 8, description: '香甜嫩滑，奶味浓郁', image: '/images/dish-placeholder.svg', rating: 4.5, reviewCount: 28, speedScore: 4.5, valueScore: 4.3, popularity: 72, tags: ['甜品', '下午茶'] },
+  { id: 'd30', windowId: 'w4', canteenId: 'c1', name: '杨枝甘露', category: '甜品', price: 12, description: '芒果椰汁西米露，清凉解暑', image: '/images/dish-placeholder.svg', rating: 4.6, reviewCount: 32, speedScore: 4.3, valueScore: 3.8, popularity: 78, tags: ['甜品', '解暑'] },
 ]

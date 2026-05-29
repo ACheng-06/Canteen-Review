@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { canteens, dishes } from '../mock'
 import DishCard from '../components/DishCard'
@@ -12,12 +12,23 @@ const categories: { label: string; emoji: string; value: DishCategory | 'all' }[
   { label: '小吃', emoji: '🍡', value: '小吃' },
   { label: '水果', emoji: '🍎', value: '水果' },
   { label: '饮品', emoji: '🧋', value: '饮品' },
+  { label: '甜品', emoji: '🍰', value: '甜品' },
 ]
+
+const quickTags = [
+  { label: '饭点推荐', hot: true },
+  { label: '15元内', hot: false },
+  { label: '出餐快', hot: false },
+  { label: '好评如潮', hot: false },
+]
+
+const PAGE_SIZE = 5
 
 export default function HomePage() {
   const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<DishCategory | 'all'>('all')
+  const [page, setPage] = useState(1)
 
   const recommended = useMemo(
     () => [...dishes].sort((a, b) => b.popularity - a.popularity).slice(0, 6),
@@ -38,6 +49,14 @@ export default function HomePage() {
     return result
   }, [search, selectedCategory])
 
+  // Reset page to 1 when search or category changes
+  useEffect(() => {
+    setPage(1)
+  }, [search, selectedCategory])
+
+  const totalPages = Math.max(1, Math.ceil(filteredDishes.length / PAGE_SIZE))
+  const paginatedDishes = filteredDishes.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+
   const totalWindows = canteens.reduce((sum, c) => sum + c.windowCount, 0)
   const totalReviews = dishes.reduce((sum, d) => sum + d.reviewCount, 0)
 
@@ -46,7 +65,7 @@ export default function HomePage() {
       className="px-4 pb-[200px]"
       style={{ background: 'linear-gradient(var(--color-bg-warm), var(--color-bg))' }}
     >
-      {/* Hero */}
+      {/* Hero card — redesigned with search, tags & stats merged in */}
       <div
         className="relative mt-4 p-5 overflow-hidden"
         style={{
@@ -56,14 +75,50 @@ export default function HomePage() {
           boxShadow: '10px 10px 0 var(--color-shadow-blue)',
         }}
       >
-        <h1 className="text-shadow-pop font-black text-2xl leading-tight">
-          校园食堂点评
-        </h1>
-        <p className="text-xs mt-1" style={{ color: '#6B4E16' }}>
-          发现你最爱的校园美食 🍜
-        </p>
+        {/* Decorative pop-art burst */}
+        <div
+          className="absolute -top-2 -right-2 flex items-center justify-center"
+          style={{
+            width: 72,
+            height: 72,
+            background: 'var(--color-amber)',
+            borderRadius: '50%',
+            border: '3px solid var(--color-ink)',
+            transform: 'rotate(12deg)',
+            boxShadow: '3px 3px 0 var(--color-ink)',
+            zIndex: 1,
+          }}
+        >
+          <span className="text-[13px] font-black text-center leading-tight">
+            WOW!
+          </span>
+        </div>
 
-        {/* Search */}
+        {/* Top row: greeting + title, TOP link */}
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-xs font-bold" style={{ color: '#6B4E16' }}>
+              校园干饭时间 🍳
+            </p>
+            <h1 className="text-shadow-pop font-black text-2xl leading-tight mt-0.5">
+              今天想吃点什么？
+            </h1>
+          </div>
+          <button
+            onClick={() => navigate('/ranking')}
+            className="mt-1 px-3 py-1 text-[11px] font-black shrink-0 transition-transform duration-150 active:scale-[0.97]"
+            style={{
+              background: 'var(--color-ink)',
+              color: 'white',
+              borderRadius: '14px',
+              border: '2px solid var(--color-ink)',
+            }}
+          >
+            TOP榜
+          </button>
+        </div>
+
+        {/* Search input */}
         <div
           className="mt-4 flex items-center gap-2 px-3 py-2"
           style={{
@@ -81,40 +136,67 @@ export default function HomePage() {
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--color-muted)]"
           />
         </div>
-      </div>
 
-      {/* Stats */}
-      <div
-        className="flex items-center justify-around mt-4 py-3 px-4"
-        style={{
-          border: '3px solid var(--color-ink)',
-          borderRadius: '20px',
-          background: 'white',
-          boxShadow: '6px 6px 0 var(--color-shadow-amber)',
-        }}
-      >
-        <div className="text-center">
-          <div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>
-            {canteens.length}
-          </div>
-          <div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>
-            食堂
-          </div>
+        {/* Quick filter tags */}
+        <div className="flex gap-2 mt-3 flex-wrap">
+          {quickTags.map((tag) => (
+            <button
+              key={tag.label}
+              onClick={() => setSearch(tag.label)}
+              className="px-3 py-1 text-xs font-bold transition-transform duration-150 active:scale-[0.97]"
+              style={{
+                background: search === tag.label ? 'var(--color-ink)' : 'white',
+                color: search === tag.label ? 'white' : 'var(--color-ink)',
+                border: '2px solid var(--color-ink)',
+                borderRadius: '14px',
+                boxShadow: '3px 3px 0 var(--color-shadow-blue)',
+              }}
+            >
+              {tag.hot && (
+                <span
+                  className="inline-block mr-1 text-[9px] font-black px-1 rounded-sm"
+                  style={{ background: '#FF4D4F', color: 'white' }}
+                >
+                  HOT
+                </span>
+              )}
+              {tag.label}
+            </button>
+          ))}
         </div>
-        <div className="text-center">
-          <div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>
-            {totalWindows}
+
+        {/* Stats panel */}
+        <div
+          className="flex items-center justify-around mt-4 py-3 px-2"
+          style={{
+            border: '3px solid var(--color-ink)',
+            borderRadius: '20px',
+            background: 'white',
+          }}
+        >
+          <div className="text-center">
+            <div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>
+              {canteens.length}
+            </div>
+            <div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>
+              食堂
+            </div>
           </div>
-          <div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>
-            窗口
+          <div className="text-center">
+            <div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>
+              {totalWindows}
+            </div>
+            <div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>
+              窗口
+            </div>
           </div>
-        </div>
-        <div className="text-center">
-          <div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>
-            {totalReviews}
-          </div>
-          <div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>
-            评价
+          <div className="text-center">
+            <div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>
+              {totalReviews}
+            </div>
+            <div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>
+              评价
+            </div>
           </div>
         </div>
       </div>
@@ -180,13 +262,13 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* All dishes / filtered */}
+      {/* All dishes / filtered with pagination */}
       <div className="mt-6">
         <h2 className="text-shadow-pop-soft text-lg font-black mb-3">
           {selectedCategory === 'all' ? '全部菜品' : selectedCategory}
         </h2>
         <div className="flex flex-col gap-3">
-          {filteredDishes.map((dish) => (
+          {paginatedDishes.map((dish) => (
             <DishCard key={dish.id} dish={dish} />
           ))}
           {filteredDishes.length === 0 && (
@@ -194,10 +276,47 @@ export default function HomePage() {
               className="text-center py-8 text-sm"
               style={{ color: 'var(--color-muted)' }}
             >
-              没有找到匹配的菜品 😅
+              没有找到匹配的菜品
             </div>
           )}
         </div>
+
+        {/* Pagination controls */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-3 mt-4">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.97] disabled:opacity-40"
+              style={{
+                background: 'var(--color-ink)',
+                color: 'white',
+                border: '3px solid var(--color-ink)',
+                borderRadius: '14px',
+                boxShadow: '4px 4px 0 var(--color-shadow-blue)',
+              }}
+            >
+              上一页
+            </button>
+            <span className="text-sm font-bold" style={{ color: 'var(--color-muted)' }}>
+              {page} / {totalPages}
+            </span>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.97] disabled:opacity-40"
+              style={{
+                background: 'var(--color-ink)',
+                color: 'white',
+                border: '3px solid var(--color-ink)',
+                borderRadius: '14px',
+                boxShadow: '4px 4px 0 var(--color-shadow-blue)',
+              }}
+            >
+              下一页
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
