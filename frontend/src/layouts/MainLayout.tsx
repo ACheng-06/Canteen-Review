@@ -22,8 +22,12 @@ export default function MainLayout() {
 
       {!isDetailPage && (
         <nav
-          className="fixed bottom-[18px] left-[18px] right-[18px] z-50"
-          style={{ maxWidth: '354px', margin: '0 auto' }}
+          className="fixed bottom-0 left-0 right-0 z-50"
+          style={{
+            background: 'rgba(255, 255, 255, 0.98)',
+            borderTop: '3px solid var(--color-ink)',
+            paddingBottom: '18px',
+          }}
         >
           <div
             className="flex items-center justify-around px-2 py-2 dot-pattern"
@@ -32,6 +36,8 @@ export default function MainLayout() {
               border: '3px solid var(--color-ink)',
               borderRadius: 'var(--radius-tab)',
               boxShadow: '0 -8px 24px rgba(23, 32, 51, 0.08), 7px 7px 0 var(--color-shadow-blue)',
+              maxWidth: '354px',
+              margin: '0 auto',
             }}
           >
             {tabs.map((tab) => {
