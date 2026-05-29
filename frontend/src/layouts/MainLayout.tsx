@@ -17,27 +17,27 @@ export default function MainLayout() {
     location.pathname.startsWith('/dishes/')
 
   return (
-    <div className="relative min-h-screen pb-[90px]">
+    <div className="relative min-h-screen pb-[100px]">
       <Outlet />
 
       {!isDetailPage && (
         <nav
           className="fixed bottom-0 left-0 right-0 z-50"
           style={{
-            background: 'rgba(255, 255, 255, 0.98)',
-            borderTop: '3px solid var(--color-ink)',
-            paddingBottom: '18px',
+            background: 'var(--color-paper)',
+            paddingBottom: '12px',
+            paddingTop: '10px',
           }}
         >
           <div
-            className="flex items-center justify-around px-2 py-2 dot-pattern"
+            className="flex items-center justify-around px-2 py-2 dot-pattern mx-auto"
             style={{
               background: 'rgba(255, 255, 255, 0.98)',
               border: '3px solid var(--color-ink)',
               borderRadius: 'var(--radius-tab)',
               boxShadow: '0 -8px 24px rgba(23, 32, 51, 0.08), 7px 7px 0 var(--color-shadow-blue)',
               maxWidth: '354px',
-              margin: '0 auto',
+              width: 'calc(100% - 36px)',
             }}
           >
             {tabs.map((tab) => {

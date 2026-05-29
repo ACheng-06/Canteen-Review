@@ -118,7 +118,7 @@ export default function DishDetailPage() {
       </div>
 
       {/* Content */}
-      <div className="px-4 -mt-4 pb-[200px]">
+      <div className="px-4 -mt-4 pb-[120px]">
         {/* Info card */}
         <div
           className="p-4 bg-white mb-4"

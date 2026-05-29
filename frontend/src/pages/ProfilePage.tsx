@@ -27,8 +27,8 @@ export default function ProfilePage() {
 
   return (
     <div
-      className="pb-[200px]"
-      style={{ background: 'linear-gradient(var(--color-bg-warm), var(--color-bg))' }}
+      className="pb-[120px]"
+      style={{ background: 'var(--color-paper)' }}
     >
       {/* Dark header */}
       <div

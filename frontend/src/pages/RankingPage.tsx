@@ -52,14 +52,14 @@ export default function RankingPage() {
 
   return (
     <div
-      className="px-4 pb-[200px]"
-      style={{ background: 'linear-gradient(var(--color-bg-warm), var(--color-bg))' }}
+      className="px-4 pb-[120px]"
+      style={{ background: 'var(--color-paper)' }}
     >
       {/* Hero */}
       <div
         className="relative mt-4 p-5 overflow-hidden"
         style={{
-          background: 'linear-gradient(white, var(--color-paper))',
+          background: 'white',
           border: '3px solid var(--color-ink)',
           borderRadius: '28px',
           boxShadow: '10px 10px 0 var(--color-shadow-blue)',

@@ -29,6 +29,7 @@ export default function HomePage() {
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<DishCategory | 'all'>('all')
   const [page, setPage] = useState(1)
+  const [showAllTags, setShowAllTags] = useState(false)
 
   const recommended = useMemo(
     () => [...dishes].sort((a, b) => b.popularity - a.popularity).slice(0, 6),
@@ -49,7 +50,6 @@ export default function HomePage() {
     return result
   }, [search, selectedCategory])
 
-  // Reset page to 1 when search or category changes
   useEffect(() => {
     setPage(1)
   }, [search, selectedCategory])
@@ -60,62 +60,74 @@ export default function HomePage() {
   const totalWindows = canteens.reduce((sum, c) => sum + c.windowCount, 0)
   const totalReviews = dishes.reduce((sum, d) => sum + d.reviewCount, 0)
 
+  const visibleTags = showAllTags ? quickTags : quickTags.slice(0, 3)
+
   return (
-    <div
-      className="px-4 pb-[200px]"
-      style={{ background: 'linear-gradient(var(--color-bg-warm), var(--color-bg))' }}
-    >
-      {/* Hero card — redesigned with search, tags & stats merged in */}
+    <div className="px-4 pb-[120px]" style={{ background: 'var(--color-paper)' }}>
+      {/* Hero card */}
       <div
         className="relative mt-4 p-5 overflow-hidden"
         style={{
-          background: 'linear-gradient(white, var(--color-paper))',
+          background: 'white',
           border: '3px solid var(--color-ink)',
           borderRadius: '28px',
           boxShadow: '10px 10px 0 var(--color-shadow-blue)',
         }}
       >
-        {/* Decorative pop-art burst */}
+        {/* Decorative: TOP榜 - top left area */}
         <div
-          className="absolute -top-2 -right-2 flex items-center justify-center"
+          className="absolute top-3 left-3 px-2 py-0.5 text-[10px] font-black"
           style={{
-            width: 72,
-            height: 72,
             background: 'var(--color-amber)',
-            borderRadius: '50%',
-            border: '3px solid var(--color-ink)',
-            transform: 'rotate(12deg)',
-            boxShadow: '3px 3px 0 var(--color-ink)',
-            zIndex: 1,
+            color: 'var(--color-ink)',
+            borderRadius: '8px',
+            border: '2px solid var(--color-ink)',
+            transform: 'rotate(-6deg)',
+            boxShadow: '2px 2px 0 var(--color-ink)',
           }}
         >
-          <span className="text-[13px] font-black text-center leading-tight">
-            WOW!
-          </span>
+          TOP榜
         </div>
 
-        {/* Top row: greeting + title, TOP link */}
-        <div className="flex items-start justify-between">
-          <div>
-            <p className="text-xs font-bold" style={{ color: '#6B4E16' }}>
-              校园干饭时间 🍳
-            </p>
-            <h1 className="text-shadow-pop font-black text-2xl leading-tight mt-0.5">
-              今天想吃点什么？
-            </h1>
-          </div>
-          <button
-            onClick={() => navigate('/ranking')}
-            className="mt-1 px-3 py-1 text-[11px] font-black shrink-0 transition-transform duration-150 active:scale-[0.97]"
-            style={{
-              background: 'var(--color-ink)',
-              color: 'white',
-              borderRadius: '14px',
-              border: '2px solid var(--color-ink)',
-            }}
-          >
-            TOP榜
-          </button>
+        {/* Decorative: WOW! - top right */}
+        <div
+          className="absolute -top-1 -right-1 flex items-center justify-center"
+          style={{
+            width: 56,
+            height: 56,
+            background: 'var(--color-pink)',
+            borderRadius: '50%',
+            border: '3px solid var(--color-ink)',
+            transform: 'rotate(15deg)',
+            boxShadow: '3px 3px 0 var(--color-ink)',
+          }}
+        >
+          <span className="text-[12px] font-black text-white">WOW!</span>
+        </div>
+
+        {/* Decorative: CAMPUS FOOD - bottom right */}
+        <div
+          className="absolute bottom-3 right-3 px-2 py-0.5 text-[9px] font-black"
+          style={{
+            background: 'var(--color-cyan)',
+            color: 'var(--color-ink)',
+            borderRadius: '8px',
+            border: '2px solid var(--color-ink)',
+            transform: 'rotate(4deg)',
+            boxShadow: '2px 2px 0 var(--color-ink)',
+          }}
+        >
+          CAMPUS FOOD
+        </div>
+
+        {/* Top row: greeting + title */}
+        <div className="mt-8">
+          <p className="text-xs font-bold" style={{ color: '#6B4E16' }}>
+            校园干饭时间 🍳
+          </p>
+          <h1 className="text-shadow-pop font-black text-2xl leading-tight mt-0.5">
+            今天想吃点什么？
+          </h1>
         </div>
 
         {/* Search input */}
@@ -139,7 +151,7 @@ export default function HomePage() {
 
         {/* Quick filter tags */}
         <div className="flex gap-2 mt-3 flex-wrap">
-          {quickTags.map((tag) => (
+          {visibleTags.map((tag) => (
             <button
               key={tag.label}
               onClick={() => setSearch(tag.label)}
@@ -163,6 +175,20 @@ export default function HomePage() {
               {tag.label}
             </button>
           ))}
+          {!showAllTags && quickTags.length > 3 && (
+            <button
+              onClick={() => setShowAllTags(true)}
+              className="px-3 py-1 text-xs font-bold transition-transform duration-150 active:scale-[0.97]"
+              style={{
+                background: 'white',
+                color: 'var(--color-muted)',
+                border: '2px solid var(--color-line)',
+                borderRadius: '14px',
+              }}
+            >
+              ···
+            </button>
+          )}
         </div>
 
         {/* Stats panel */}
