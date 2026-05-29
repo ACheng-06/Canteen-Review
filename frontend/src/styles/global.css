@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+/* ============================================
+   NEO-BRUTALIST POP-ART THEME
+   ============================================ */
+
+@theme {
+  /* ---- Color Palette ---- */
+  --color-ink: #172033;
+  --color-paper: #FFFDF7;
+  --color-bg: #F7F8FA;
+  --color-bg-warm: #FFF8E8;
+  --color-blue: #1677FF;
+  --color-green: #22A06B;
+  --color-amber: #FFB020;
+  --color-red: #FF4D4F;
+  --color-pink: #FF4FB8;
+  --color-cyan: #00C2FF;
+  --color-yellow: #FFE14D;
+  --color-purple: #6C5CE7;
+
+  /* Soft tints */
+  --color-soft-blue: #EAF3FF;
+  --color-soft-green: #EAF7F0;
+  --color-soft-amber: #FFF7E8;
+  --color-soft-red: #FFF0F0;
+  --color-soft-purple: #F0ECFF;
+
+  /* Shadows */
+  --color-shadow-blue: #DCE7F5;
+  --color-shadow-green: #DDF3E8;
+  --color-shadow-amber: #FFE4A8;
+  --color-shadow-pink: #FFD6EE;
+
+  /* Muted text */
+  --color-muted: #8A93A3;
+  --color-muted-dark: #697386;
+  --color-line: #D8DFEA;
+
+  /* ---- Border Radius ---- */
+  --radius-card: 22px;
+  --radius-button: 18px;
+  --radius-badge: 20px;
+  --radius-pill: 999px;
+  --radius-tab: 32px;
+  --radius-avatar: 34px;
+}
+
+/* ---- Global Base ---- */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+/* Mobile-first container */
+#root {
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--color-paper);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ---- Pop-art text shadow utility ---- */
+.text-shadow-pop {
+  text-shadow:
+    3px 3px 0 var(--color-yellow),
+    6px 6px 0 rgba(0, 194, 255, 0.22);
+}
+
+.text-shadow-pop-soft {
+  text-shadow:
+    2px 2px 0 rgba(255, 225, 77, 0.75);
+}
+
+/* ---- Neo-brutalist card base ---- */
+.card-brutal {
+  border: 3px solid var(--color-ink);
+  border-radius: var(--radius-card);
+  box-shadow: 7px 7px 0 var(--color-shadow-blue);
+  background: white;
+  transition: transform 0.16s ease;
+}
+
+.card-brutal:active {
+  transform: scale(0.99);
+}
+
+/* ---- Dot pattern background ---- */
+.dot-pattern {
+  background-image: radial-gradient(
+    circle at 18px 18px,
+    rgba(255, 176, 32, 0.15) 0 4px,
+    transparent 5px
+  );
+  background-size: 34px 34px;
+}
+
+/* ---- Speed lines ---- */
+.speed-lines {
+  background-image: repeating-linear-gradient(
+    -12deg,
+    rgba(255, 225, 77, 0.08) 0 8px,
+    transparent 8px 18px
+  );
+}
+
+/* ---- Scrollbar hide ---- */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
