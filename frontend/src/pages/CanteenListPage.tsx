@@ -1,7 +1,19 @@
-import { canteens } from '../mock'
+import { useState, useEffect } from 'react'
+import { getCanteens } from '../api/canteens'
 import CanteenCard from '../components/CanteenCard'
+import type { Canteen } from '../types'
 
 export default function CanteenListPage() {
+  const [canteens, setCanteens] = useState<Canteen[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getCanteens()
+      .then((data) => setCanteens(data))
+      .catch((err) => console.error('Failed to load canteens:', err))
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <div
       className="px-4 pb-[120px]"
@@ -23,12 +35,21 @@ export default function CanteenListPage() {
         </p>
       </div>
 
+      {/* Loading */}
+      {loading && (
+        <div className="text-center py-10" style={{ color: 'var(--color-muted)' }}>
+          加载中...
+        </div>
+      )}
+
       {/* Canteen list */}
-      <div className="flex flex-col gap-3 mt-5">
-        {canteens.map((canteen, i) => (
-          <CanteenCard key={canteen.id} canteen={canteen} index={i} />
-        ))}
-      </div>
+      {!loading && (
+        <div className="flex flex-col gap-3 mt-5">
+          {canteens.map((canteen, i) => (
+            <CanteenCard key={canteen.id} canteen={canteen} index={i} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

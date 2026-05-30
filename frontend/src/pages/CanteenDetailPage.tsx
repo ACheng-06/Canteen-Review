@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { canteens, windows, dishes } from '../mock'
+import { getCanteenById } from '../api/canteens'
 import DishCard from '../components/DishCard'
 import { formatRating } from '../utils/format'
 
@@ -8,17 +9,39 @@ const shadowColors = ['var(--color-shadow-blue)', 'var(--color-shadow-green)', '
 export default function CanteenDetailPage() {
   const { canteenId } = useParams<{ canteenId: string }>()
   const navigate = useNavigate()
+  const [canteen, setCanteen] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
-  const canteen = canteens.find((c) => c.id === canteenId)
-  if (!canteen) {
+  useEffect(() => {
+    if (!canteenId) return
+    setLoading(true)
+    getCanteenById(canteenId)
+      .then((data) => setCanteen(data))
+      .catch((err) => {
+        console.error('Failed to load canteen:', err)
+        setNotFound(true)
+      })
+      .finally(() => setLoading(false))
+  }, [canteenId])
+
+  if (loading) {
     return (
       <div className="p-6 text-center" style={{ color: 'var(--color-muted)' }}>
-        食堂不存在 😅
+        加载中...
       </div>
     )
   }
 
-  const canteenWindows = windows.filter((w) => w.canteenId === canteenId)
+  if (notFound || !canteen) {
+    return (
+      <div className="p-6 text-center" style={{ color: 'var(--color-muted)' }}>
+        食堂不存在
+      </div>
+    )
+  }
+
+  const canteenWindows = canteen.windows ?? []
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
@@ -68,8 +91,8 @@ export default function CanteenDetailPage() {
 
       {/* Windows */}
       <div className="px-4 -mt-4">
-        {canteenWindows.map((win, winIdx) => {
-          const winDishes = dishes.filter((d) => d.windowId === win.id)
+        {canteenWindows.map((win: any, winIdx: number) => {
+          const winDishes = win.dishes ?? []
           return (
             <div key={win.id} className="mt-6">
               <div
@@ -99,7 +122,7 @@ export default function CanteenDetailPage() {
                   {win.description}
                 </p>
                 <div className="flex flex-col gap-2">
-                  {winDishes.map((dish) => (
+                  {winDishes.map((dish: any) => (
                     <DishCard key={dish.id} dish={dish} shadowColor={shadowColors[winIdx % 3]} />
                   ))}
                 </div>

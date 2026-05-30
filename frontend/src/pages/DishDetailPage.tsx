@@ -1,50 +1,84 @@
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { dishes, canteens, windows } from '../mock'
-import { useReviewStore } from '../stores/useReviewStore'
+import { getDishById, getDishReviews, submitReview } from '../api/dishes'
+import { useAuthStore } from '../stores/useAuthStore'
 import { useFavoriteStore } from '../stores/useFavoriteStore'
 import { useHistoryStore } from '../stores/useHistoryStore'
-import { currentUser } from '../mock'
 import { formatPrice, formatRating } from '../utils/format'
 import ReviewForm from '../components/ReviewForm'
 import ReviewList from '../components/ReviewList'
 import StarRating from '../components/StarRating'
-import { useEffect } from 'react'
+import type { Dish, Review } from '../types'
 
 export default function DishDetailPage() {
   const { dishId } = useParams<{ dishId: string }>()
   const navigate = useNavigate()
 
-  const dish = dishes.find((d) => d.id === dishId)
-  const { getDishReviews, addReview } = useReviewStore()
+  const [dish, setDish] = useState<(Dish & { windowName?: string; canteenName?: string }) | null>(null)
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
+
   const { isFavorite, toggleFavorite } = useFavoriteStore()
   const { addHistory } = useHistoryStore()
+  const user = useAuthStore((s) => s.user)
+
+  const fetchReviews = useCallback(async (id: string) => {
+    try {
+      const res = await getDishReviews(id)
+      setReviews(res.data)
+    } catch (err) {
+      console.error('Failed to load reviews:', err)
+    }
+  }, [])
 
   useEffect(() => {
-    if (dishId) addHistory(dishId)
-  }, [dishId, addHistory])
+    if (!dishId) return
+    addHistory(dishId)
+    setLoading(true)
 
-  if (!dish) {
+    Promise.all([
+      getDishById(dishId).then((data) => setDish(data)),
+      fetchReviews(dishId),
+    ])
+      .catch((err) => {
+        console.error('Failed to load dish:', err)
+        setNotFound(true)
+      })
+      .finally(() => setLoading(false))
+  }, [dishId, addHistory, fetchReviews])
+
+  if (loading) {
     return (
       <div className="p-6 text-center" style={{ color: 'var(--color-muted)' }}>
-        菜品不存在 😅
+        加载中...
       </div>
     )
   }
 
-  const canteen = canteens.find((c) => c.id === dish.canteenId)
-  const window = windows.find((w) => w.id === dish.windowId)
-  const reviews = getDishReviews(dish.id)
+  if (notFound || !dish) {
+    return (
+      <div className="p-6 text-center" style={{ color: 'var(--color-muted)' }}>
+        菜品不存在
+      </div>
+    )
+  }
+
   const fav = isFavorite(dish.id)
 
-  const handleSubmit = (rating: number, content: string) => {
-    addReview({
-      dishId: dish.id,
-      userId: currentUser.id,
-      userName: currentUser.nickname,
-      avatar: currentUser.avatar,
-      rating,
-      content,
-    })
+  const handleSubmit = async (rating: number, content: string) => {
+    if (!user) {
+      alert('请先登录后再提交评价')
+      return
+    }
+    try {
+      await submitReview(dish.id, rating, content)
+      // 重新拉取评价列表
+      await fetchReviews(dish.id)
+    } catch (err) {
+      console.error('Failed to submit review:', err)
+      alert('提交评价失败，请重试')
+    }
   }
 
   return (
@@ -132,13 +166,13 @@ export default function DishDetailPage() {
             <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
               所属食堂
             </span>
-            <span className="text-sm font-bold">{canteen?.name}</span>
+            <span className="text-sm font-bold">{dish.canteenName}</span>
           </div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
               窗口
             </span>
-            <span className="text-sm font-bold">{window?.name}</span>
+            <span className="text-sm font-bold">{dish.windowName}</span>
           </div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs" style={{ color: 'var(--color-muted)' }}>
@@ -170,7 +204,30 @@ export default function DishDetailPage() {
 
         {/* Review form */}
         <div className="mb-4">
-          <ReviewForm onSubmit={handleSubmit} />
+          {user ? (
+            <ReviewForm onSubmit={handleSubmit} />
+          ) : (
+            <div
+              className="p-4 bg-white text-center"
+              style={{
+                border: '3px solid var(--color-ink)',
+                borderRadius: '22px',
+                boxShadow: '7px 7px 0 var(--color-shadow-amber)',
+              }}
+            >
+              <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
+                请先{' '}
+                <span
+                  className="font-bold cursor-pointer"
+                  style={{ color: 'var(--color-blue)' }}
+                  onClick={() => navigate('/login')}
+                >
+                  登录
+                </span>{' '}
+                后再提交评价
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Reviews */}
