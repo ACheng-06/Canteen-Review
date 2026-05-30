@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Canteen Review</string>
+    <string name="title_activity_main">Canteen Review</string>
+    <string name="package_name">com.canteenreview.app</string>
+    <string name="custom_url_scheme">com.canteenreview.app</string>
+</resources>
