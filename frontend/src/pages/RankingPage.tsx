@@ -113,41 +113,65 @@ export default function RankingPage() {
         ))}
       </div>
 
-      {/* Top 3 podium */}
-      <div className="flex gap-2 mt-5">
-        {top3.map((dish, i) => (
-          <div
-            key={dish.id}
-            onClick={() => navigate(`/dishes/${dish.id}`)}
-            className="flex-1 p-3 bg-white cursor-pointer transition-transform duration-150 active:scale-[0.99]"
-            style={{
-              border: '3px solid var(--color-ink)',
-              borderRadius: '18px',
-              boxShadow: `6px 6px 0 ${rankShadows[i]}`,
-              flex: i === 0 ? '1.25' : '1',
-            }}
-          >
-            <div className="text-2xl text-center mb-1">{rankLabels[i]}</div>
+      {/* Top 3 podium — order: 2nd - 1st - 3rd */}
+      <div className="flex items-end gap-2 mt-5">
+        {[1, 0, 2].map((idx) => {
+          const dish = top3[idx]
+          if (!dish) return null
+          const isFirst = idx === 0
+          return (
             <div
-              className="w-full h-16 flex items-center justify-center text-2xl mb-2"
+              key={dish.id}
+              onClick={() => navigate(`/dishes/${dish.id}`)}
+              className="bg-white cursor-pointer transition-transform duration-150 active:scale-[0.99]"
               style={{
-                background: 'var(--color-soft-amber)',
-                borderRadius: '14px',
-                border: '2px solid var(--color-ink)',
+                border: '3px solid var(--color-ink)',
+                borderRadius: '18px',
+                boxShadow: `6px 6px 0 ${rankShadows[idx]}`,
+                flex: isFirst ? '1.3' : '1',
+                padding: isFirst ? '14px 10px' : '10px 8px',
               }}
             >
-              🍽️
+              <div
+                className="text-center mb-1"
+                style={{ fontSize: isFirst ? '28px' : '22px' }}
+              >
+                {rankLabels[idx]}
+              </div>
+              <div
+                className="w-full flex items-center justify-center mb-2"
+                style={{
+                  background: 'var(--color-soft-amber)',
+                  borderRadius: '14px',
+                  border: '2px solid var(--color-ink)',
+                  height: isFirst ? '80px' : '56px',
+                  fontSize: isFirst ? '32px' : '24px',
+                }}
+              >
+                🍽️
+              </div>
+              <div
+                className="font-black text-center truncate"
+                style={{ fontSize: isFirst ? '15px' : '13px' }}
+              >
+                {dish.name}
+              </div>
+              <div
+                className="text-center mt-0.5"
+                style={{
+                  color: 'var(--color-muted)',
+                  fontSize: isFirst ? '13px' : '11px',
+                }}
+              >
+                {category === 'popularity'
+                  ? `人气 ${dish.popularity}`
+                  : category === 'speed'
+                    ? `速度 ${dish.speedScore.toFixed(1)}`
+                    : `性价比 ${dish.valueScore.toFixed(1)}`}
+              </div>
             </div>
-            <div className="font-black text-sm text-center truncate">{dish.name}</div>
-            <div className="text-xs text-center mt-0.5" style={{ color: 'var(--color-muted)' }}>
-              {category === 'popularity'
-                ? `人气 ${dish.popularity}`
-                : category === 'speed'
-                  ? `速度 ${dish.speedScore.toFixed(1)}`
-                  : `性价比 ${dish.valueScore.toFixed(1)}`}
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Rest of ranking */}

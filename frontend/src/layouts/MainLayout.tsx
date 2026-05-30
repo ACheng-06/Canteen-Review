@@ -25,6 +25,8 @@ export default function MainLayout() {
           className="fixed bottom-0 left-0 right-0 z-50"
           style={{
             background: 'var(--color-paper)',
+            paddingBottom: '12px',
+            paddingTop: '5px',
           }}
         >
           <div
