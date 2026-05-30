@@ -61,6 +61,24 @@ export default function HomePage() {
   const totalWindows = canteens.reduce((sum, c) => sum + c.windowCount, 0)
   const totalReviews = dishes.reduce((sum, d) => sum + d.reviewCount, 0)
 
+  const updateSearch = (nextSearch: string) => {
+    setSearch((current) => {
+      if (current !== nextSearch) {
+        setPage(1)
+      }
+      return nextSearch
+    })
+  }
+
+  const updateCategory = (nextCategory: DishCategory | 'all') => {
+    setSelectedCategory((current) => {
+      if (current !== nextCategory) {
+        setPage(1)
+      }
+      return nextCategory
+    })
+  }
+
   return (
     <div className="px-4" style={{ background: 'var(--color-paper)' }}>
       {/* Hero card */}
@@ -152,10 +170,7 @@ export default function HomePage() {
             type="text"
             placeholder="搜索菜品、食堂..."
             value={search}
-            onChange={(e) => {
-              setSearch(e.target.value)
-              setPage(1)
-            }}
+            onChange={(e) => updateSearch(e.target.value)}
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--color-muted)]"
           />
         </div>
@@ -165,10 +180,7 @@ export default function HomePage() {
           {mainTags.map((tag) => (
             <button
               key={tag.label}
-              onClick={() => {
-                setSearch(tag.label)
-                setPage(1)
-              }}
+              onClick={() => updateSearch(tag.label)}
               className="px-3 py-1 text-xs font-bold transition-transform duration-150 active:scale-[0.97] whitespace-nowrap"
               style={{
                 background: search === tag.label ? 'var(--color-ink)' : 'white',
@@ -229,8 +241,7 @@ export default function HomePage() {
                   <button
                     key={label}
                     onClick={() => {
-                      setSearch(label)
-                      setPage(1)
+                      updateSearch(label)
                       setShowTagPopup(false)
                     }}
                     className="px-3 py-1.5 text-xs font-bold transition-transform duration-150 active:scale-[0.97]"
@@ -292,10 +303,7 @@ export default function HomePage() {
           {categories.map((cat) => (
             <button
               key={cat.value}
-              onClick={() => {
-                setSelectedCategory(cat.value)
-                setPage(1)
-              }}
+              onClick={() => updateCategory(cat.value)}
               className="flex flex-col items-center gap-1 py-3 transition-transform duration-150 active:scale-[0.97]"
               style={{
                 background:

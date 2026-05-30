@@ -48,6 +48,24 @@ export default function RankingPage() {
   const rankLabels = ['🥇', '🥈', '🥉']
   const rankShadows = ['#FFCF7A', '#E0E0E0', '#D7CCC8']
 
+  const updatePeriod = (nextPeriod: RankPeriod) => {
+    setPeriod((current) => {
+      if (current !== nextPeriod) {
+        setPage(1)
+      }
+      return nextPeriod
+    })
+  }
+
+  const updateCategory = (nextCategory: RankCategory) => {
+    setCategory((current) => {
+      if (current !== nextCategory) {
+        setPage(1)
+      }
+      return nextCategory
+    })
+  }
+
   return (
     <div
       className="px-4 "
@@ -74,10 +92,7 @@ export default function RankingPage() {
         {periodTabs.map((tab) => (
           <button
             key={tab.value}
-            onClick={() => {
-                setPeriod(tab.value)
-                setPage(1)
-              }}
+            onClick={() => updatePeriod(tab.value)}
             className="px-4 py-1.5 text-sm font-bold transition-transform duration-150 active:scale-[0.97]"
             style={{
               background:
@@ -100,10 +115,7 @@ export default function RankingPage() {
         {categoryTabs.map((tab) => (
           <button
             key={tab.value}
-            onClick={() => {
-                setCategory(tab.value)
-                setPage(1)
-              }}
+            onClick={() => updateCategory(tab.value)}
             className="px-3 py-1.5 text-xs font-bold transition-transform duration-150"
             style={{
               background: category === tab.value ? 'var(--color-soft-amber)' : 'white',
