@@ -44,10 +44,10 @@ export default function CanteenDetailPage() {
   const canteenWindows = canteen.windows ?? []
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
+    <div className="min-h-screen -mt-7" style={{ background: 'var(--color-bg)' }}>
       {/* Header with back button */}
       <div
-        className="p-5 pb-8"
+        className="p-5 pt-12"
         style={{
           background: 'var(--color-ink)',
           borderBottom: '5px solid var(--color-ink)',
