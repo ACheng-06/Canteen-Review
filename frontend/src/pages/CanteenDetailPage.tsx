@@ -67,7 +67,7 @@ export default function CanteenDetailPage() {
       </div>
 
       {/* Windows */}
-      <div className="px-4 -mt-4 pb-[120px]">
+      <div className="px-4 -mt-4">
         {canteenWindows.map((win, winIdx) => {
           const winDishes = dishes.filter((d) => d.windowId === win.id)
           return (

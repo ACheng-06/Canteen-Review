@@ -27,7 +27,7 @@ export default function ProfilePage() {
 
   return (
     <div
-      className="pb-[120px]"
+      className=""
       style={{ background: 'var(--color-paper)' }}
     >
       {/* Dark header */}

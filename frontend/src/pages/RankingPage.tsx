@@ -52,7 +52,7 @@ export default function RankingPage() {
 
   return (
     <div
-      className="px-4 pb-[120px]"
+      className="px-4 "
       style={{ background: 'var(--color-paper)' }}
     >
       {/* Hero */}

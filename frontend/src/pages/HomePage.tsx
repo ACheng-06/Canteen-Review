@@ -15,15 +15,16 @@ const categories: { label: string; emoji: string; value: DishCategory | 'all' }[
   { label: '甜品', emoji: '🍰', value: '甜品' },
 ]
 
-const quickTags = [
+// 主行显示的标签（前3个热度高的）
+const mainTags = [
   { label: '饭点推荐', hot: true },
   { label: '15元内', hot: false },
   { label: '出餐快', hot: false },
-  { label: '好评如潮', hot: false },
 ]
 
-const extraTags = [
-  '清淡饮食', '量大管饱', '新品上架', '同学推荐', '下饭神器', '适合拍照',
+// 弹窗里的标签（剩余的 + 更多）
+const popupTags = [
+  '好评如潮', '清淡饮食', '量大管饱', '新品上架', '同学推荐', '下饭神器', '适合拍照',
 ]
 
 const PAGE_SIZE = 5
@@ -65,7 +66,7 @@ export default function HomePage() {
   const totalReviews = dishes.reduce((sum, d) => sum + d.reviewCount, 0)
 
   return (
-    <div className="px-4 pb-[120px]" style={{ background: 'var(--color-paper)' }}>
+    <div className="px-4" style={{ background: 'var(--color-paper)' }}>
       {/* Hero card */}
       <div
         className="relative mt-4 p-5 overflow-hidden"
@@ -162,7 +163,7 @@ export default function HomePage() {
 
         {/* Quick filter tags - all 4 on one line + ... */}
         <div className="flex gap-2 mt-3 items-center">
-          {quickTags.map((tag) => (
+          {mainTags.map((tag) => (
             <button
               key={tag.label}
               onClick={() => setSearch(tag.label)}
@@ -222,7 +223,7 @@ export default function HomePage() {
             >
               <h3 className="font-black text-base mb-3">更多标签</h3>
               <div className="flex flex-wrap gap-2">
-                {[...quickTags.map(t => t.label), ...extraTags].map((label) => (
+                {popupTags.map((label) => (
                   <button
                     key={label}
                     onClick={() => {
