@@ -1,73 +1,108 @@
-# React + TypeScript + Vite
+# 食堂点评 Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+校园食堂点评 Web App 第一版前端。当前版本是纯前端演示版，用于验证移动端页面结构、导航流程、食堂/窗口/菜品/评价交互，以及整体视觉风格。
 
-Currently, two official plugins are available:
+## 当前阶段
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+第一版已完成：
 
-## React Compiler
+- React + TypeScript + Vite 前端
+- Tailwind CSS 4 主题样式
+- React Router 页面路由
+- Zustand 本地状态
+- mock 食堂、窗口、菜品、评价、用户数据
+- localStorage 持久化用户评价、收藏、浏览记录
+- 移动端优先布局，最大宽度约 390px
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+当前仍然是纯前端版本：
 
-## Expanding the ESLint configuration
+- 暂无真实后端
+- 暂无真实数据库
+- 暂无真实登录注册
+- 暂无图片上传
+- 暂无管理后台
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 功能页面
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 首页：搜索、快速标签、菜品分类、热门推荐、菜品分页
+- 排行榜：今日/本周、人气/出餐快/省钱、排行榜分页
+- 食堂列表：展示所有 mock 食堂
+- 食堂详情：展示食堂窗口与窗口菜品
+- 菜品详情：展示菜品信息、历史评价、提交本地评价、收藏
+- 我的：展示 mock 用户、我的收藏、浏览记录、我的评价
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 安装依赖
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 开发预览
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+> 第一版样式已通过开发预览人工验收。后续质量收尾阶段不把 `npm run dev` 作为必须重复执行的验收命令。
+
+## 质量检查
+
+生产构建：
+
+```bash
+npm run build
+```
+
+代码检查：
+
+```bash
+npm run lint
+```
+
+`npm run build` 会先运行 TypeScript 构建检查，再运行 Vite 生产打包。
+
+## Android 手机预览（Capacitor）
+
+首次接入后，常用命令如下：
+
+```bash
+npm run build
+npx cap sync android
+npx cap open android
+```
+
+如果已经配置了便捷脚本，也可以使用：
+
+```bash
+npm run cap:sync
+npm run cap:open
+```
+
+Android Studio 打开后，可以选择安卓真机或模拟器运行。
+
+真机预览要求：
+
+1. 安卓手机开启开发者模式
+2. 开启 USB 调试
+3. 用数据线连接电脑
+4. Android Studio 中选择设备并点击 Run
+5. 手机端允许 USB 调试授权
+
+## 第一版手动验收清单
+
+- 首页能搜索和筛选菜品
+- 首页分页按钮可正常切换
+- 排行榜能切换时间和分类
+- 排行榜分页按钮可正常切换
+- 食堂列表能进入食堂详情
+- 食堂详情能进入菜品详情
+- 菜品详情能提交评价
+- 提交评价后立即出现在评价列表
+- 刷新后本地评价仍保留
+- 收藏菜品后，我的页面能看到收藏
+- 浏览菜品详情后，我的页面能看到浏览记录
+- 底部 Tab 切换正常
+
+## 下一阶段方向
+
+当前计划先完成 Android Capacitor 手机预览。后续再设计真实后端：Express + TypeScript + Prisma + PostgreSQL。
