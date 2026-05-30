@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { dishes } from '../mock'
+import { getRanking } from '../api/ranking'
 import type { RankPeriod, RankCategory } from '../types'
 
 const periodTabs: { label: string; value: RankPeriod }[] = [
@@ -19,7 +19,23 @@ export default function RankingPage() {
   const [period, setPeriod] = useState<RankPeriod>('today')
   const [category, setCategory] = useState<RankCategory>('popularity')
   const [page, setPage] = useState(1)
+  const [rankedDishes, setRankedDishes] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const pageSize = 8
+
+  useEffect(() => {
+    async function fetchRanking() {
+      try {
+        const data = await getRanking(category)
+        setRankedDishes(data)
+      } catch (err) {
+        console.error('Failed to fetch ranking:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchRanking()
+  }, [category])
 
   const sorted = useMemo(() => {
     const key =
@@ -28,7 +44,7 @@ export default function RankingPage() {
         : category === 'speed'
           ? 'speedScore'
           : 'valueScore'
-    const list = [...dishes]
+    const list = [...rankedDishes]
     list.sort((a, b) => {
       const diff = b[key] - a[key]
       // Week rankings factor in review count as tiebreaker
@@ -38,7 +54,7 @@ export default function RankingPage() {
       return diff
     })
     return list
-  }, [period, category])
+  }, [rankedDishes, period, category])
 
   const top3 = sorted.slice(0, 3)
   const rest = sorted.slice(3)
@@ -64,6 +80,14 @@ export default function RankingPage() {
       }
       return nextCategory
     })
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20" style={{ background: 'var(--color-paper)' }}>
+        <div className="text-lg font-black" style={{ color: 'var(--color-muted)' }}>加载中...</div>
+      </div>
+    )
   }
 
   return (

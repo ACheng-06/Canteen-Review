@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { canteens, dishes } from '../mock'
+import { getCanteens } from '../api/canteens'
+import { getDishes } from '../api/dishes'
 import DishCard from '../components/DishCard'
 import type { DishCategory } from '../types'
 
@@ -35,31 +36,52 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<DishCategory | 'all'>('all')
   const [page, setPage] = useState(1)
   const [showTagPopup, setShowTagPopup] = useState(false)
+  const [canteens, setCanteens] = useState<any[]>([])
+  const [allDishes, setAllDishes] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [canteensData, dishesData] = await Promise.all([
+          getCanteens(),
+          getDishes({ limit: 100 }),
+        ])
+        setCanteens(canteensData)
+        setAllDishes(dishesData.data)
+      } catch (err) {
+        console.error('Failed to fetch data:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
 
   const recommended = useMemo(
-    () => [...dishes].sort((a, b) => b.popularity - a.popularity).slice(0, 6),
-    [],
+    () => [...allDishes].sort((a, b) => b.popularity - a.popularity).slice(0, 6),
+    [allDishes],
   )
 
   const filteredDishes = useMemo(() => {
-    let result = dishes
+    let result = allDishes
     if (selectedCategory !== 'all') {
       result = result.filter((d) => d.category === selectedCategory)
     }
     if (search.trim()) {
       const q = search.trim().toLowerCase()
       result = result.filter(
-        (d) => d.name.toLowerCase().includes(q) || d.tags.some((t) => t.includes(q)),
+        (d) => d.name.toLowerCase().includes(q) || d.tags.some((t: string) => t.includes(q)),
       )
     }
     return result
-  }, [search, selectedCategory])
+  }, [allDishes, search, selectedCategory])
 
   const totalPages = Math.max(1, Math.ceil(filteredDishes.length / PAGE_SIZE))
   const paginatedDishes = filteredDishes.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   const totalWindows = canteens.reduce((sum, c) => sum + c.windowCount, 0)
-  const totalReviews = dishes.reduce((sum, d) => sum + d.reviewCount, 0)
+  const totalReviews = allDishes.reduce((sum: number, d: any) => sum + d.reviewCount, 0)
 
   const updateSearch = (nextSearch: string) => {
     setSearch((current) => {
@@ -77,6 +99,14 @@ export default function HomePage() {
       }
       return nextCategory
     })
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20" style={{ background: 'var(--color-paper)' }}>
+        <div className="text-lg font-black" style={{ color: 'var(--color-muted)' }}>加载中...</div>
+      </div>
+    )
   }
 
   return (
