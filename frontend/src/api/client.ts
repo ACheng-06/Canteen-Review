@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const client = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://123.57.166.231:3000/api',
 })
 
 // 请求拦截器：自动附加 token
