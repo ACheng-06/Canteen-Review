@@ -1,4 +1,5 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../stores/useAuthStore'
 
 const tabs = [
   { path: '/', label: '首页', icon: '🏠', activeIcon: '🏡' },
@@ -10,6 +11,7 @@ const tabs = [
 export default function MainLayout() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { token } = useAuthStore()
 
   // Hide tab bar on detail pages
   const isDetailPage =
@@ -18,15 +20,8 @@ export default function MainLayout() {
     location.pathname === '/login' ||
     location.pathname === '/register'
 
-  // Main pages that need top padding for status bar
-  const isMainPage =
-    location.pathname === '/' ||
-    location.pathname === '/ranking' ||
-    location.pathname === '/canteens' ||
-    location.pathname === '/profile'
-
   return (
-    <div className={`relative min-h-screen pb-[100px] ${isMainPage ? 'pt-7' : ''}`}>
+    <div className="relative min-h-screen pb-[100px]">
       <Outlet />
 
       {!isDetailPage && (
@@ -58,7 +53,13 @@ export default function MainLayout() {
               return (
                 <button
                   key={tab.path}
-                  onClick={() => navigate(tab.path)}
+                  onClick={() => {
+                    if (tab.path === '/profile' && !token) {
+                      navigate('/login')
+                    } else {
+                      navigate(tab.path)
+                    }
+                  }}
                   className="flex flex-col items-center gap-0.5 px-3 py-1.5 transition-all duration-150"
                   style={{
                     borderRadius: 'var(--radius-card)',
