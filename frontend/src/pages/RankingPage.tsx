@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { dishes } from '../mock'
 import type { RankPeriod, RankCategory } from '../types'
@@ -20,8 +20,6 @@ export default function RankingPage() {
   const [category, setCategory] = useState<RankCategory>('popularity')
   const [page, setPage] = useState(1)
   const pageSize = 8
-
-  useEffect(() => { setPage(1) }, [period, category])
 
   const sorted = useMemo(() => {
     const key =
@@ -76,7 +74,10 @@ export default function RankingPage() {
         {periodTabs.map((tab) => (
           <button
             key={tab.value}
-            onClick={() => setPeriod(tab.value)}
+            onClick={() => {
+                setPeriod(tab.value)
+                setPage(1)
+              }}
             className="px-4 py-1.5 text-sm font-bold transition-transform duration-150 active:scale-[0.97]"
             style={{
               background:
@@ -99,7 +100,10 @@ export default function RankingPage() {
         {categoryTabs.map((tab) => (
           <button
             key={tab.value}
-            onClick={() => setCategory(tab.value)}
+            onClick={() => {
+                setCategory(tab.value)
+                setPage(1)
+              }}
             className="px-3 py-1.5 text-xs font-bold transition-transform duration-150"
             style={{
               background: category === tab.value ? 'var(--color-soft-amber)' : 'white',
