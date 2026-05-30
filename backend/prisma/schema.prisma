@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  nickname  String
+  avatar    String   @default("🧑‍🍳")
+  bio       String   @default("")
+  reviews   Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Canteen {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  floors      Int
+  status      String   @default("open")
+  tags        String[]
+  location    String
+  cover       String   @default("")
+  rating      Float    @default(0)
+  windows     Window[]
+  dishes      Dish[]
+}
+
+model Window {
+  id          String   @id @default(cuid())
+  canteenId   String
+  canteen     Canteen  @relation(fields: [canteenId], references: [id])
+  name        String
+  floor       Int
+  description String
+  status      String   @default("open")
+  tags        String[]
+  dishes      Dish[]
+}
+
+model Dish {
+  id           String   @id @default(cuid())
+  windowId     String
+  window       Window   @relation(fields: [windowId], references: [id])
+  canteenId    String
+  canteen      Canteen  @relation(fields: [canteenId], references: [id])
+  name         String
+  category     String
+  price        Float
+  description  String
+  image        String   @default("/images/dish-placeholder.svg")
+  rating       Float    @default(0)
+  reviewCount  Int      @default(0)
+  speedScore   Float    @default(0)
+  valueScore   Float    @default(0)
+  popularity   Int      @default(0)
+  tags         String[]
+  reviews      Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  dishId    String
+  dish      Dish     @relation(fields: [dishId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  rating    Int
+  content   String
+  likes     Int      @default(0)
+  createdAt DateTime @default(now())
+}
