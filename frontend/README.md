@@ -106,3 +106,24 @@ Android Studio 打开后，可以选择安卓真机或模拟器运行。
 ## 下一阶段方向
 
 当前计划先完成 Android Capacitor 手机预览。后续再设计真实后端：Express + TypeScript + Prisma + PostgreSQL。
+
+## Android Studio 常见问题
+
+如果 `npm run cap:open` 或 Android Studio 首次打开失败，优先检查环境：
+
+- 是否已安装 Android Studio
+- Android Studio SDK Manager 中是否安装 Android SDK Platform
+- 是否安装 Android SDK Build-Tools
+- 是否安装 Android SDK Platform-Tools
+- 是否能完成 Gradle Sync
+- 是否开启代理或镜像以保证 Gradle 依赖下载成功
+
+首次 Gradle Sync 失败通常是本机 Android 环境或网络下载问题，不一定是前端代码问题。
+
+如果安卓真机无法识别：
+
+1. 确认手机已开启开发者模式
+2. 确认已开启 USB 调试
+3. 重新插拔 USB 数据线
+4. 手机弹出 USB 调试授权时选择允许
+5. 在 Android Studio 顶部设备列表中重新选择设备
