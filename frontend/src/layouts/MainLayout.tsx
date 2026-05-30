@@ -14,10 +14,19 @@ export default function MainLayout() {
   // Hide tab bar on detail pages
   const isDetailPage =
     location.pathname.startsWith('/canteens/') ||
-    location.pathname.startsWith('/dishes/')
+    location.pathname.startsWith('/dishes/') ||
+    location.pathname === '/login' ||
+    location.pathname === '/register'
+
+  // Main pages that need top padding for status bar
+  const isMainPage =
+    location.pathname === '/' ||
+    location.pathname === '/ranking' ||
+    location.pathname === '/canteens' ||
+    location.pathname === '/profile'
 
   return (
-    <div className="relative min-h-screen pb-[100px]">
+    <div className={`relative min-h-screen pb-[100px] ${isMainPage ? 'pt-7' : ''}`}>
       <Outlet />
 
       {!isDetailPage && (
@@ -26,7 +35,7 @@ export default function MainLayout() {
           style={{
             background: 'var(--color-paper)',
             paddingBottom: '12px',
-            paddingTop: '5px',
+            paddingTop: '2px',
           }}
         >
           <div

@@ -6,6 +6,8 @@ import CanteenListPage from '../pages/CanteenListPage'
 import CanteenDetailPage from '../pages/CanteenDetailPage'
 import DishDetailPage from '../pages/DishDetailPage'
 import ProfilePage from '../pages/ProfilePage'
+import LoginPage from '../pages/LoginPage'
+import RegisterPage from '../pages/RegisterPage'
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +20,8 @@ export const router = createBrowserRouter([
       { path: 'canteens/:canteenId', element: <CanteenDetailPage /> },
       { path: 'dishes/:dishId', element: <DishDetailPage /> },
       { path: 'profile', element: <ProfilePage /> },
+      { path: 'login', element: <LoginPage /> },
+      { path: 'register', element: <RegisterPage /> },
     ],
   },
 ])
