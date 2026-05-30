@@ -47,3 +47,8 @@ $RECYCLE.BIN/
 *.swp
 *.swo
 *~
+
+# Backend
+backend/node_modules/
+backend/.env
+backend/dist/
