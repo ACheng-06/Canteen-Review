@@ -1,3 +1,4 @@
+// DEPRECATED: 数据已迁移到后端 API，此文件仅供参考
 import type { Window } from '../types'
 
 export const windows: Window[] = [

@@ -1,3 +1,4 @@
+// DEPRECATED: 数据已迁移到后端 API，此文件仅供参考
 import type { User } from '../types'
 
 export const currentUser: User = {

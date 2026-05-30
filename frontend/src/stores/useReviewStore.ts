@@ -1,3 +1,4 @@
+// DEPRECATED: 数据已迁移到后端 API，此文件仅供参考
 import { create } from 'zustand'
 import type { Review } from '../types'
 import { reviews as mockReviews } from '../mock'

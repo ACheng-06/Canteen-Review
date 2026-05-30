@@ -14,13 +14,12 @@
 - localStorage 持久化用户评价、收藏、浏览记录
 - 移动端优先布局，最大宽度约 390px
 
-当前仍然是纯前端版本：
+第二版已完成：
 
-- 暂无真实后端
-- 暂无真实数据库
-- 暂无真实登录注册
-- 暂无图片上传
-- 暂无管理后台
+- Express + TypeScript 后端
+- Prisma ORM + PostgreSQL 数据库
+- RESTful API（食堂、窗口、菜品、评价、用户、排行）
+- 前后端联调（Vite proxy 转发 `/api`）
 
 ## 功能页面
 
@@ -60,6 +59,32 @@ npm run lint
 ```
 
 `npm run build` 会先运行 TypeScript 构建检查，再运行 Vite 生产打包。
+
+## 后端启动
+
+```bash
+cd backend
+npm install
+npx prisma migrate dev
+npx prisma db seed
+npm run dev
+```
+
+后端运行在 http://localhost:3000
+
+## 前后端联调
+
+同时启动前端和后端：
+
+```bash
+# 终端 1
+cd backend && npm run dev
+
+# 终端 2
+cd frontend && npm run dev
+```
+
+前端通过 Vite proxy 将 `/api` 请求转发到后端。
 
 ## Android 手机预览（Capacitor）
 
@@ -105,7 +130,7 @@ Android Studio 打开后，可以选择安卓真机或模拟器运行。
 
 ## 下一阶段方向
 
-当前计划先完成 Android Capacitor 手机预览。后续再设计真实后端：Express + TypeScript + Prisma + PostgreSQL。
+后端已完成。后续可继续完善：管理后台、图片上传、真实登录注册、部署上线。
 
 ## Android Studio 常见问题
 
