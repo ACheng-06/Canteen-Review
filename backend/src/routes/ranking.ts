@@ -115,7 +115,11 @@ router.get('/', async (req, res) => {
         break
     }
 
-    scoredDishes.sort((a, b) => b[sortKey as keyof typeof b] - a[sortKey as keyof typeof a])
+    scoredDishes.sort((a, b) => {
+      const aVal = a[sortKey as keyof typeof a] as number
+      const bVal = b[sortKey as keyof typeof b] as number
+      return bVal - aVal
+    })
 
     // 取前 N 个
     const topDishes = scoredDishes.slice(0, limitNum)
