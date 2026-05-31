@@ -57,5 +57,4 @@ backend/prisma/seed.ts
 # Claude Code
 .claude/
 .superpowers/
-docs/superpowers/
-CLAUDE.md
+docs/
