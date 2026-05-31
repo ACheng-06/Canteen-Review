@@ -120,10 +120,16 @@ router.get('/:id/reviews', async (req, res) => {
 // POST /api/dishes/:id/reviews（需登录）
 router.post('/:id/reviews', authMiddleware, async (req, res) => {
   const dishId = String(req.params.id)
-  const { rating, content } = req.body
+  const { rating, speedRating, valueRating, content } = req.body
 
   if (!rating || rating < 1 || rating > 5) {
     return res.status(400).json({ error: '评分必须为 1-5' })
+  }
+  if (!speedRating || speedRating < 1 || speedRating > 5) {
+    return res.status(400).json({ error: '出餐速度评分必须为 1-5' })
+  }
+  if (!valueRating || valueRating < 1 || valueRating > 5) {
+    return res.status(400).json({ error: '性价比评分必须为 1-5' })
   }
   if (!content || !content.trim()) {
     return res.status(400).json({ error: '评价内容不能为空' })
@@ -139,10 +145,67 @@ router.post('/:id/reviews', authMiddleware, async (req, res) => {
       dishId,
       userId: req.user!.userId,
       rating,
+      speedRating,
+      valueRating,
       content: content.trim(),
     },
     include: { user: { select: { nickname: true, avatar: true } } },
   })
+
+  // 聚合更新 dish 的所有分数
+  const agg = await prisma.review.aggregate({
+    where: { dishId },
+    _avg: { rating: true, speedRating: true, valueRating: true },
+    _count: true,
+    _sum: { likes: true },
+  })
+
+  // 计算人气值：评价数 × 10 + 点赞数 × 2
+  const popularity = (agg._count ?? 0) * 10 + (agg._sum?.likes ?? 0) * 2
+
+  await prisma.dish.update({
+    where: { id: dishId },
+    data: {
+      rating: agg._avg?.rating ?? 0,
+      speedScore: agg._avg?.speedRating ?? 0,
+      valueScore: agg._avg?.valueRating ?? 0,
+      reviewCount: agg._count ?? 0,
+      popularity,
+    },
+  })
+
+  const reviewWithUser = review as typeof review & { user: { nickname: string; avatar: string } }
+
+  res.status(201).json({
+    data: {
+      id: reviewWithUser.id,
+      rating: reviewWithUser.rating,
+      speedRating: reviewWithUser.speedRating,
+      valueRating: reviewWithUser.valueRating,
+      content: reviewWithUser.content,
+      likes: reviewWithUser.likes,
+      createdAt: reviewWithUser.createdAt,
+      userId: reviewWithUser.userId,
+      userName: reviewWithUser.user.nickname,
+      userAvatar: reviewWithUser.user.avatar,
+    },
+  })
+})
+
+// DELETE /api/reviews/:id（需登录，只能删自己的）
+router.delete('/reviews/:id', authMiddleware, async (req, res) => {
+  const reviewId = String(req.params.id)
+
+  const review = await prisma.review.findUnique({ where: { id: reviewId } })
+  if (!review) {
+    return res.status(404).json({ error: '评价不存在' })
+  }
+  if (review.userId !== req.user!.userId) {
+    return res.status(403).json({ error: '只能删除自己的评价' })
+  }
+
+  const dishId = review.dishId
+  await prisma.review.delete({ where: { id: reviewId } })
 
   // 聚合更新 dish 的 rating 和 reviewCount
   const agg = await prisma.review.aggregate({
@@ -159,20 +222,7 @@ router.post('/:id/reviews', authMiddleware, async (req, res) => {
     },
   })
 
-  const reviewWithUser = review as typeof review & { user: { nickname: string; avatar: string } }
-
-  res.status(201).json({
-    data: {
-      id: reviewWithUser.id,
-      rating: reviewWithUser.rating,
-      content: reviewWithUser.content,
-      likes: reviewWithUser.likes,
-      createdAt: reviewWithUser.createdAt,
-      userId: reviewWithUser.userId,
-      userName: reviewWithUser.user.nickname,
-      userAvatar: reviewWithUser.user.avatar,
-    },
-  })
+  res.json({ data: { id: reviewId } })
 })
 
 export default router

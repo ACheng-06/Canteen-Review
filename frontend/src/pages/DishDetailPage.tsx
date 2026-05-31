@@ -5,6 +5,7 @@ import { useAuthStore } from '../stores/useAuthStore'
 import { useFavoriteStore } from '../stores/useFavoriteStore'
 import { useHistoryStore } from '../stores/useHistoryStore'
 import { formatPrice, formatRating } from '../utils/format'
+import { getCategoryVisual } from '../utils/categoryVisual'
 import ReviewForm from '../components/ReviewForm'
 import ReviewList from '../components/ReviewList'
 import StarRating from '../components/StarRating'
@@ -26,7 +27,11 @@ export default function DishDetailPage() {
   const fetchReviews = useCallback(async (id: string) => {
     try {
       const res = await getDishReviews(id)
-      setReviews(res.data)
+      const reviews = res.data.map((r: any) => ({
+        ...r,
+        avatar: r.userAvatar,
+      }))
+      setReviews(reviews)
     } catch (err) {
       console.error('Failed to load reviews:', err)
     }
@@ -66,13 +71,13 @@ export default function DishDetailPage() {
 
   const fav = isFavorite(dish.id)
 
-  const handleSubmit = async (rating: number, content: string) => {
+  const handleSubmit = async (rating: number, speedRating: number, valueRating: number, content: string) => {
     if (!user) {
       alert('请先登录后再提交评价')
       return
     }
     try {
-      await submitReview(dish.id, rating, content)
+      await submitReview(dish.id, rating, speedRating, valueRating, content)
       // 重新拉取评价列表
       await fetchReviews(dish.id)
     } catch (err) {
@@ -110,12 +115,12 @@ export default function DishDetailPage() {
         <div
           className="w-20 h-20 mx-auto flex items-center justify-center text-4xl mb-3"
           style={{
-            background: 'var(--color-soft-amber)',
+            background: getCategoryVisual(dish.category).bg,
             borderRadius: '24px',
             border: '3px solid rgba(255,255,255,0.3)',
           }}
         >
-          🍽️
+          {getCategoryVisual(dish.category).emoji}
         </div>
 
         <h1 className="text-white text-xl font-black text-center">{dish.name}</h1>

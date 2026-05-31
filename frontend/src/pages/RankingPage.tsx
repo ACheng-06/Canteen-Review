@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getRanking } from '../api/ranking'
+import { getCategoryVisual } from '../utils/categoryVisual'
 import type { RankPeriod, RankCategory } from '../types'
 
 const periodTabs: { label: string; value: RankPeriod }[] = [
-  { label: '今日榜', value: 'today' },
-  { label: '本周榜', value: 'week' },
+  { label: '日榜', value: 'today' },
+  { label: '周榜', value: 'week' },
+  { label: '月榜', value: 'month' },
 ]
 
 const categoryTabs: { label: string; value: RankCategory; emoji: string }[] = [
@@ -18,15 +20,13 @@ export default function RankingPage() {
   const navigate = useNavigate()
   const [period, setPeriod] = useState<RankPeriod>('today')
   const [category, setCategory] = useState<RankCategory>('popularity')
-  const [page, setPage] = useState(1)
   const [rankedDishes, setRankedDishes] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const pageSize = 8
 
   useEffect(() => {
     async function fetchRanking() {
       try {
-        const data = await getRanking(category)
+        const data = await getRanking(category, period)
         setRankedDishes(data)
       } catch (err) {
         console.error('Failed to fetch ranking:', err)
@@ -35,7 +35,7 @@ export default function RankingPage() {
       }
     }
     fetchRanking()
-  }, [category])
+  }, [category, period])
 
   const sorted = useMemo(() => {
     const key =
@@ -47,8 +47,8 @@ export default function RankingPage() {
     const list = [...rankedDishes]
     list.sort((a, b) => {
       const diff = b[key] - a[key]
-      // Week rankings factor in review count as tiebreaker
-      if (period === 'week') {
+      // Week/month rankings factor in review count as tiebreaker
+      if (period === 'week' || period === 'month') {
         return diff !== 0 ? diff : b.reviewCount - a.reviewCount
       }
       return diff
@@ -57,29 +57,17 @@ export default function RankingPage() {
   }, [rankedDishes, period, category])
 
   const top3 = sorted.slice(0, 3)
-  const rest = sorted.slice(3)
-  const totalPages = Math.ceil(rest.length / pageSize)
-  const paginatedRest = rest.slice((page - 1) * pageSize, page * pageSize)
+  const rest = sorted.slice(3, 10)
 
   const rankLabels = ['🥇', '🥈', '🥉']
   const rankShadows = ['#FFCF7A', '#E0E0E0', '#D7CCC8']
 
   const updatePeriod = (nextPeriod: RankPeriod) => {
-    setPeriod((current) => {
-      if (current !== nextPeriod) {
-        setPage(1)
-      }
-      return nextPeriod
-    })
+    setPeriod(nextPeriod)
   }
 
   const updateCategory = (nextCategory: RankCategory) => {
-    setCategory((current) => {
-      if (current !== nextCategory) {
-        setPage(1)
-      }
-      return nextCategory
-    })
+    setCategory(nextCategory)
   }
 
   if (loading) {
@@ -91,10 +79,9 @@ export default function RankingPage() {
   }
 
   return (
-    <div
-      className="px-4 "
-      style={{ background: 'var(--color-paper)' }}
-    >
+    <div style={{ background: 'var(--color-paper)' }}>
+      <div className="safe-area-top" />
+      <div className="px-4">
       {/* Hero */}
       <div
         className="relative mt-4 p-5 overflow-hidden"
@@ -111,46 +98,66 @@ export default function RankingPage() {
         </p>
       </div>
 
-      {/* Period tabs */}
-      <div className="flex gap-2 mt-4">
-        {periodTabs.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => updatePeriod(tab.value)}
-            className="px-4 py-1.5 text-sm font-bold transition-transform duration-150 active:scale-[0.97]"
-            style={{
-              background:
-                period === tab.value
-                  ? 'linear-gradient(135deg, #172033 0%, #172033 60%, #FF4FB8 60%, #FF4FB8 100%)'
-                  : 'white',
-              color: period === tab.value ? 'white' : 'var(--color-ink)',
-              border: '3px solid var(--color-ink)',
-              borderRadius: '16px',
-              boxShadow: period === tab.value ? '4px 4px 0 var(--color-amber)' : '4px 4px 0 var(--color-shadow-blue)',
-            }}
-          >
-            {tab.label}
-          </button>
-        ))}
+      {/* Period tabs — capsule slider */}
+      <div
+        className="flex mt-4 p-1"
+        style={{
+          background: 'var(--color-bg)',
+          border: '3px solid var(--color-ink)',
+          borderRadius: '999px',
+        }}
+      >
+        {periodTabs.map((tab) => {
+          const active = period === tab.value
+          return (
+            <button
+              key={tab.value}
+              onClick={() => updatePeriod(tab.value)}
+              className="flex-1 py-1.5 text-sm font-black"
+              style={{
+                background: active ? 'white' : 'transparent',
+                color: active ? 'var(--color-ink)' : 'var(--color-muted)',
+                borderRadius: '999px',
+                border: active ? '2px solid var(--color-ink)' : '2px solid transparent',
+                boxShadow: active ? '3px 3px 0 var(--color-shadow-blue)' : 'none',
+                transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
+            >
+              {tab.label}
+            </button>
+          )
+        })}
       </div>
 
-      {/* Category tabs */}
-      <div className="flex gap-2 mt-3">
-        {categoryTabs.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => updateCategory(tab.value)}
-            className="px-3 py-1.5 text-xs font-bold transition-transform duration-150"
-            style={{
-              background: category === tab.value ? 'var(--color-soft-amber)' : 'white',
-              color: category === tab.value ? 'var(--color-ink)' : 'var(--color-muted)',
-              border: `2px solid ${category === tab.value ? 'var(--color-ink)' : 'var(--color-line)'}`,
-              borderRadius: 'var(--radius-pill)',
-            }}
-          >
-            {tab.emoji} {tab.label}
-          </button>
-        ))}
+      {/* Category tabs — capsule slider */}
+      <div
+        className="flex mt-3 p-1"
+        style={{
+          background: 'var(--color-bg)',
+          border: '2px solid var(--color-ink)',
+          borderRadius: '999px',
+        }}
+      >
+        {categoryTabs.map((tab) => {
+          const active = category === tab.value
+          return (
+            <button
+              key={tab.value}
+              onClick={() => updateCategory(tab.value)}
+              className="flex-1 py-1.5 text-xs font-black"
+              style={{
+                background: active ? 'white' : 'transparent',
+                color: active ? 'var(--color-ink)' : 'var(--color-muted)',
+                borderRadius: '999px',
+                border: active ? '2px solid var(--color-ink)' : '2px solid transparent',
+                boxShadow: active ? '2px 2px 0 var(--color-shadow-amber)' : 'none',
+                transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              }}
+            >
+              {tab.emoji} {tab.label}
+            </button>
+          )
+        })}
       </div>
 
       {/* Top 3 podium — order: 2nd - 1st - 3rd */}
@@ -163,13 +170,34 @@ export default function RankingPage() {
             <div
               key={dish.id}
               onClick={() => navigate(`/dishes/${dish.id}`)}
-              className="bg-white cursor-pointer transition-transform duration-150 active:scale-[0.99]"
+              className="bg-white cursor-pointer"
               style={{
                 border: '3px solid var(--color-ink)',
                 borderRadius: '18px',
                 boxShadow: `6px 6px 0 ${rankShadows[idx]}`,
                 flex: isFirst ? '1.3' : '1',
                 padding: isFirst ? '14px 10px' : '10px 8px',
+                transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
+              }}
+              onMouseDown={(e) => {
+                e.currentTarget.style.transform = 'scale(0.95)'
+                e.currentTarget.style.boxShadow = `3px 3px 0 ${rankShadows[idx]}`
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+                e.currentTarget.style.boxShadow = `6px 6px 0 ${rankShadows[idx]}`
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+                e.currentTarget.style.boxShadow = `6px 6px 0 ${rankShadows[idx]}`
+              }}
+              onTouchStart={(e) => {
+                e.currentTarget.style.transform = 'scale(0.95)'
+                e.currentTarget.style.boxShadow = `3px 3px 0 ${rankShadows[idx]}`
+              }}
+              onTouchEnd={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+                e.currentTarget.style.boxShadow = `6px 6px 0 ${rankShadows[idx]}`
               }}
             >
               <div
@@ -181,14 +209,14 @@ export default function RankingPage() {
               <div
                 className="w-full flex items-center justify-center mb-2"
                 style={{
-                  background: 'var(--color-soft-amber)',
+                  background: getCategoryVisual(dish.category).bg,
                   borderRadius: '14px',
                   border: '2px solid var(--color-ink)',
                   height: isFirst ? '80px' : '56px',
-                  fontSize: isFirst ? '32px' : '24px',
+                  fontSize: isFirst ? '36px' : '28px',
                 }}
               >
-                🍽️
+                {getCategoryVisual(dish.category).emoji}
               </div>
               <div
                 className="font-black text-center truncate"
@@ -214,98 +242,90 @@ export default function RankingPage() {
         })}
       </div>
 
-      {/* Rest of ranking */}
-      <div
-        className="mt-4 overflow-hidden"
-        style={{
-          border: '3px solid var(--color-ink)',
-          borderRadius: '20px',
-          boxShadow: '5px 5px 0 var(--color-shadow-blue)',
-          background: 'white',
-        }}
-      >
-        {paginatedRest.map((dish, i) => {
-          const rank = (page - 1) * pageSize + i + 4
-          return (
-            <div
-              key={dish.id}
-              onClick={() => navigate(`/dishes/${dish.id}`)}
-              className="flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors"
-              style={{
-                borderBottom: i < paginatedRest.length - 1 ? '2px solid #F5F6FA' : 'none',
-                background: i % 2 === 0 ? 'white' : 'var(--color-paper)',
-              }}
-            >
-              <span
-                className="w-6 h-6 flex items-center justify-center text-xs font-black rounded"
-                style={{
-                  background: 'var(--color-bg)',
-                  border: '2px solid var(--color-ink)',
-                }}
-              >
-                {rank}
-              </span>
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-sm truncate">{dish.name}</div>
-                <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
-                  ⭐ {dish.rating.toFixed(1)} · ¥{dish.price}
-                </div>
-              </div>
-              <div className="text-sm font-black" style={{ color: 'var(--color-blue)' }}>
-                {category === 'popularity'
-                  ? dish.popularity
-                  : category === 'speed'
-                    ? dish.speedScore.toFixed(1)
-                    : dish.valueScore.toFixed(1)}
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 mt-4">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.97] disabled:opacity-40"
+      {/* Empty state */}
+      {sorted.length === 0 && (
+        <div className="mt-5">
+          <div
+            className="text-center py-10 px-4"
             style={{
-              background: '#172033',
-              color: 'white',
               border: '3px solid var(--color-ink)',
-              borderRadius: '14px',
-              boxShadow: '4px 4px 0 var(--color-shadow-blue)',
+              borderRadius: '22px',
+              background: 'white',
+              boxShadow: '7px 7px 0 var(--color-shadow-blue)',
             }}
           >
-            上一页
-          </button>
-          <span
-            className="px-3 py-1 text-sm font-bold"
-            style={{
-              background: 'var(--color-soft-amber)',
-              border: '2px solid var(--color-ink)',
-              borderRadius: '10px',
-            }}
-          >
-            {page} / {totalPages}
-          </span>
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.97] disabled:opacity-40"
-            style={{
-              background: '#172033',
-              color: 'white',
-              border: '3px solid var(--color-ink)',
-              borderRadius: '14px',
-              boxShadow: '4px 4px 0 var(--color-shadow-blue)',
-            }}
-          >
-            下一页
-          </button>
+            <div className="text-5xl mb-3">🏆</div>
+            <p className="font-black text-base mb-1" style={{ color: 'var(--color-ink)' }}>暂无排行数据</p>
+            <p className="text-xs" style={{ color: 'var(--color-muted)' }}>快去评价菜品，争夺排行榜吧！</p>
+          </div>
         </div>
       )}
+
+      {/* Rest of ranking (4-10) */}
+      {rest.length > 0 && (
+        <div
+          className="mt-4 overflow-hidden"
+          style={{
+            border: '3px solid var(--color-ink)',
+            borderRadius: '20px',
+            boxShadow: '5px 5px 0 var(--color-shadow-blue)',
+            background: 'white',
+          }}
+        >
+          {rest.map((dish, i) => {
+            const rank = i + 4
+            const isLast = i === rest.length - 1
+            return (
+              <div
+                key={dish.id}
+                onClick={() => navigate(`/dishes/${dish.id}`)}
+                className="flex items-center gap-3 px-4 py-3 cursor-pointer"
+                style={{
+                  borderBottom: isLast ? 'none' : '2px solid #F5F6FA',
+                  background: i % 2 === 0 ? 'white' : 'var(--color-paper)',
+                  transition: 'transform 0.2s ease, background 0.15s ease',
+                }}
+                onMouseDown={(e) => {
+                  e.currentTarget.style.transform = 'scale(0.98)'
+                  e.currentTarget.style.background = 'var(--color-bg)'
+                }}
+                onMouseUp={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
+                onTouchStart={(e) => {
+                  e.currentTarget.style.transform = 'scale(0.98)'
+                  e.currentTarget.style.background = 'var(--color-bg)'
+                }}
+                onTouchEnd={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
+              >
+                <span
+                  className="w-6 h-6 flex items-center justify-center text-xs font-black rounded"
+                  style={{
+                    background: 'var(--color-bg)',
+                    border: '2px solid var(--color-ink)',
+                  }}
+                >
+                  {rank}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{dish.name}</div>
+                  <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
+                    ⭐ {dish.rating.toFixed(1)} · ¥{dish.price}
+                  </div>
+                </div>
+                <div className="text-sm font-black" style={{ color: 'var(--color-blue)' }}>
+                  {category === 'popularity'
+                    ? dish.popularity
+                    : category === 'speed'
+                      ? dish.speedScore.toFixed(1)
+                      : dish.valueScore.toFixed(1)}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      </div>
     </div>
   )
 }

@@ -4,23 +4,24 @@ import { getCanteens } from '../api/canteens'
 import { getDishes } from '../api/dishes'
 import DishCard from '../components/DishCard'
 import { useAuthStore } from '../stores/useAuthStore'
+import { getCategoryVisual } from '../utils/categoryVisual'
 import type { DishCategory } from '../types'
 
 const categories: { label: string; emoji: string; value: DishCategory | 'all' }[] = [
   { label: '全部', emoji: '🍽️', value: 'all' },
-  { label: '热菜', emoji: '🥘', value: '热菜' },
-  { label: '凉菜', emoji: '🥗', value: '凉菜' },
-  { label: '面食', emoji: '🍜', value: '面食' },
-  { label: '小吃', emoji: '🍡', value: '小吃' },
-  { label: '水果', emoji: '🍎', value: '水果' },
+  { label: '热菜', emoji: '🍲', value: '热菜' },
+  { label: '粉面', emoji: '🍜', value: '粉面' },
+  { label: '面食', emoji: '🌾', value: '面食' },
+  { label: '小吃', emoji: '🍢', value: '小吃' },
+  { label: '水果', emoji: '🍉', value: '水果' },
   { label: '饮品', emoji: '🧋', value: '饮品' },
   { label: '甜品', emoji: '🍰', value: '甜品' },
 ]
 
 const announcements = [
-  '📢 二食堂新窗口"川味小厨"已开业，欢迎品尝！',
-  '🎉 本周消费满50元可参与食堂抽奖活动',
-  '⏰ 温馨提示：错峰就餐更舒适哦~',
+  '📢 欢迎使用「华航小助手APP」！感谢你成为我们的首批用户，你的每一次评价都在让我们变得更好！',
+  '🎉 目前仍在持续完善中，部分功能可能存在不足，感谢你的理解与包容。',
+  '⏰ 💬 遇到问题或有好的建议？欢迎随时反馈，我们会认真对待每一条意见。',
 ]
 
 const hotSearches = ['麻辣烫', '黄焖鸡', '奶茶', '炒饭', '拉面', '炸鸡']
@@ -73,7 +74,7 @@ export default function HomePage() {
 
   const fetchData = async () => {
     try {
-      const [c, d] = await Promise.all([getCanteens(), getDishes({ limit: 100 })])
+      const [c, d] = await Promise.all([getCanteens(), getDishes({ limit: 200 })])
       setCanteens(c)
       setAllDishes(d.data)
     } catch (e) { console.error(e) }
@@ -329,7 +330,9 @@ export default function HomePage() {
       <div className="px-4 mt-6">
         <h2 className="text-shadow-pop-soft text-lg font-black mb-3">🔥 热门推荐</h2>
         <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
-          {recommended.map((dish) => (
+          {recommended.map((dish) => {
+            const v = getCategoryVisual(dish.category)
+            return (
             <div
               key={dish.id}
               onClick={() => navigate(`/dishes/${dish.id}`)}
@@ -341,11 +344,12 @@ export default function HomePage() {
               onTouchStart={(e) => pressDown(e.currentTarget)}
               onTouchEnd={(e) => pressUp(e.currentTarget)}
             >
-              <div className="w-full h-20 flex items-center justify-center text-3xl mb-2" style={{ background: 'var(--color-soft-amber)', borderRadius: '16px', border: '2px solid var(--color-ink)' }}>🍽️</div>
+              <div className="w-full h-20 flex items-center justify-center text-4xl mb-2" style={{ background: v.bg, borderRadius: '16px', border: '2px solid var(--color-ink)' }}>{v.emoji}</div>
               <div className="font-black text-sm truncate">{dish.name}</div>
               <div className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>⭐ {dish.rating.toFixed(1)} · ¥{dish.price}</div>
             </div>
-          ))}
+            )
+          })}
         </div>
       </div>
 

@@ -12,6 +12,13 @@ export default function CanteenDetailPage() {
   const [canteen, setCanteen] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
+  const [showBackToTop, setShowBackToTop] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 400)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     if (!canteenId) return
@@ -92,6 +99,21 @@ export default function CanteenDetailPage() {
 
       {/* Windows */}
       <div className="px-4 -mt-4">
+        {canteenWindows.length === 0 && (
+          <div
+            className="mt-6 text-center py-10 px-4"
+            style={{
+              border: '3px solid var(--color-ink)',
+              borderRadius: '22px',
+              background: 'white',
+              boxShadow: '7px 7px 0 var(--color-shadow-blue)',
+            }}
+          >
+            <div className="text-5xl mb-3">🏪</div>
+            <p className="font-black text-base mb-1" style={{ color: 'var(--color-ink)' }}>暂无窗口数据</p>
+            <p className="text-xs" style={{ color: 'var(--color-muted)' }}>该食堂还没有录入窗口和菜品信息</p>
+          </div>
+        )}
         {canteenWindows.map((win: any, winIdx: number) => {
           const winDishes = win.dishes ?? []
           return (
@@ -132,6 +154,30 @@ export default function CanteenDetailPage() {
           )
         })}
       </div>
+
+      {/* Back to top */}
+      {showBackToTop && (
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed z-50 flex items-center justify-center transition-all duration-300"
+          style={{
+            bottom: 90,
+            right: 20,
+            width: 44,
+            height: 44,
+            background: 'var(--color-ink)',
+            border: '3px solid var(--color-ink)',
+            borderRadius: '50%',
+            boxShadow: '3px 3px 0 var(--color-shadow-blue)',
+            color: 'white',
+            fontSize: '18px',
+            opacity: showBackToTop ? 1 : 0,
+            transform: showBackToTop ? 'scale(1)' : 'scale(0.5)',
+          }}
+        >
+          ↑
+        </button>
+      )}
     </div>
   )
 }

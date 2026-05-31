@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/useAuthStore'
+import WelcomeModal from '../components/WelcomeModal'
 
 const tabs = [
   { path: '/', label: '首页', icon: '🏠', activeIcon: '🏡' },
@@ -23,6 +24,7 @@ export default function MainLayout() {
   return (
     <div className="relative min-h-screen pb-[100px]">
       <Outlet />
+      <WelcomeModal />
 
       {!isDetailPage && (
         <nav

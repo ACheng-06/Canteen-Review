@@ -11,10 +11,18 @@ const prisma = new PrismaClient({ adapter })
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
-  const { email, password, nickname } = req.body
+  const { email, password, nickname, currentSchool, newSchool } = req.body
 
   if (!email || !password || !nickname) {
     return res.status(400).json({ error: '邮箱、密码、昵称均为必填' })
+  }
+
+  // 验证学校名称
+  if (currentSchool !== '北华航天工业学院') {
+    return res.status(400).json({ error: '请输入正确的学校全名' })
+  }
+  if (newSchool !== '河北航空航天大学') {
+    return res.status(400).json({ error: '请输入正确的即将更改的校名' })
   }
 
   const existing = await prisma.user.findUnique({ where: { email } })

@@ -5,9 +5,11 @@ import { useAuthStore } from '../stores/useAuthStore'
 export default function RegisterPage() {
   const navigate = useNavigate()
   const register = useAuthStore((s) => s.register)
+  const [currentSchool, setCurrentSchool] = useState('')
+  const [newSchool, setNewSchool] = useState('')
+  const [nickname, setNickname] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [nickname, setNickname] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -16,7 +18,7 @@ export default function RegisterPage() {
     setError('')
     setLoading(true)
     try {
-      await register(email, password, nickname)
+      await register(email, password, nickname, currentSchool, newSchool)
       navigate('/')
     } catch (err: any) {
       setError(err.response?.data?.error || '注册失败')
@@ -36,6 +38,13 @@ export default function RegisterPage() {
           boxShadow: '10px 10px 0 var(--color-shadow-blue)',
         }}
       >
+        <button
+          onClick={() => navigate('/')}
+          className="mb-4 text-sm font-bold flex items-center gap-1"
+          style={{ color: 'var(--color-muted)' }}
+        >
+          ← 返回首页
+        </button>
         <h1 className="text-shadow-pop font-black text-2xl text-center mb-6">注册</h1>
 
         {error && (
@@ -53,6 +62,32 @@ export default function RegisterPage() {
         )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label className="text-xs font-bold block mb-1">目前学校</label>
+            <input
+              type="text"
+              value={currentSchool}
+              onChange={(e) => setCurrentSchool(e.target.value)}
+              placeholder="请输入目前学校的全名"
+              required
+              className="w-full px-3 py-2 text-sm outline-none"
+              style={{ background: 'var(--color-bg)', border: '3px solid var(--color-ink)', borderRadius: '16px' }}
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-bold block mb-1">即将更改的校名</label>
+            <input
+              type="text"
+              value={newSchool}
+              onChange={(e) => setNewSchool(e.target.value)}
+              placeholder="请输入即将更改的校名"
+              required
+              className="w-full px-3 py-2 text-sm outline-none"
+              style={{ background: 'var(--color-bg)', border: '3px solid var(--color-ink)', borderRadius: '16px' }}
+            />
+          </div>
+
           <div>
             <label className="text-xs font-bold block mb-1">昵称</label>
             <input

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { formatPrice, formatRating } from '../utils/format'
+import { getCategoryVisual } from '../utils/categoryVisual'
 import type { Dish } from '../types'
 
 interface DishCardProps {
@@ -9,6 +10,7 @@ interface DishCardProps {
 
 export default function DishCard({ dish, shadowColor = 'var(--color-shadow-blue)' }: DishCardProps) {
   const navigate = useNavigate()
+  const visual = getCategoryVisual(dish.category)
 
   return (
     <div
@@ -48,14 +50,14 @@ export default function DishCard({ dish, shadowColor = 'var(--color-shadow-blue)
     >
       {/* Image */}
       <div
-        className="w-[72px] h-[72px] flex-shrink-0 flex items-center justify-center text-3xl"
+        className="w-[72px] h-[72px] flex-shrink-0 flex items-center justify-center text-4xl"
         style={{
-          background: 'var(--color-soft-amber)',
+          background: visual.bg,
           borderRadius: '16px',
           border: '2px solid var(--color-ink)',
         }}
       >
-        🍽️
+        {visual.emoji}
       </div>
 
       {/* Info */}

@@ -15,9 +15,10 @@ interface AuthState {
   user: User | null
   isLoading: boolean
   login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, nickname: string) => Promise<void>
+  register: (email: string, password: string, nickname: string, currentSchool: string, newSchool: string) => Promise<void>
   logout: () => void
   fetchMe: () => Promise<void>
+  updateProfile: (data: { nickname?: string; avatar?: string; bio?: string }) => Promise<void>
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -31,8 +32,8 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ token, user })
   },
 
-  register: async (email, password, nickname) => {
-    const { token, user } = await authApi.register(email, password, nickname)
+  register: async (email, password, nickname, currentSchool, newSchool) => {
+    const { token, user } = await authApi.register(email, password, nickname, currentSchool, newSchool)
     localStorage.setItem('canteen-auth-token', token)
     set({ token, user })
   },
@@ -51,5 +52,10 @@ export const useAuthStore = create<AuthState>((set) => ({
       localStorage.removeItem('canteen-auth-token')
       set({ token: null, user: null, isLoading: false })
     }
+  },
+
+  updateProfile: async (data) => {
+    const user = await authApi.updateProfile(data)
+    set({ user })
   },
 }))

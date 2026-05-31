@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Review" ADD COLUMN     "speedRating" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "valueRating" INTEGER NOT NULL DEFAULT 0;

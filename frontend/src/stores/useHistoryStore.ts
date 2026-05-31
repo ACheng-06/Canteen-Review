@@ -7,6 +7,8 @@ const MAX_HISTORY = 50
 interface HistoryState {
   historyDishIds: string[]
   addHistory: (dishId: string) => void
+  removeHistory: (dishId: string) => void
+  clearHistory: () => void
 }
 
 export const useHistoryStore = create<HistoryState>((set, get) => {
@@ -21,6 +23,17 @@ export const useHistoryStore = create<HistoryState>((set, get) => {
       const next = [dishId, ...filtered].slice(0, MAX_HISTORY)
       setStorage(STORAGE_KEY, next)
       set({ historyDishIds: next })
+    },
+
+    removeHistory: (dishId) => {
+      const next = get().historyDishIds.filter((id) => id !== dishId)
+      setStorage(STORAGE_KEY, next)
+      set({ historyDishIds: next })
+    },
+
+    clearHistory: () => {
+      setStorage(STORAGE_KEY, [])
+      set({ historyDishIds: [] })
     },
   }
 })

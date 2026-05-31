@@ -15,7 +15,18 @@ export async function getDishReviews(dishId: string, page = 1, limit = 10) {
   return res.data
 }
 
-export async function submitReview(dishId: string, rating: number, content: string) {
-  const res = await client.post(`/dishes/${dishId}/reviews`, { rating, content })
+export async function submitReview(
+  dishId: string,
+  rating: number,
+  speedRating: number,
+  valueRating: number,
+  content: string
+) {
+  const res = await client.post(`/dishes/${dishId}/reviews`, {
+    rating,
+    speedRating,
+    valueRating,
+    content,
+  })
   return res.data.data
 }

@@ -66,13 +66,15 @@ model Dish {
 }
 
 model Review {
-  id        String   @id @default(cuid())
-  dishId    String
-  dish      Dish     @relation(fields: [dishId], references: [id])
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  rating    Int
-  content   String
-  likes     Int      @default(0)
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  dishId       String
+  dish         Dish     @relation(fields: [dishId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  rating       Int
+  speedRating  Int      @default(0)
+  valueRating  Int      @default(0)
+  content      String
+  likes        Int      @default(0)
+  createdAt    DateTime @default(now())
 }

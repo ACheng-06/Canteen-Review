@@ -52,6 +52,7 @@ $RECYCLE.BIN/
 backend/node_modules/
 backend/.env
 backend/dist/
+backend/prisma/seed.ts
 
 # Claude Code
 .claude/

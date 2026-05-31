@@ -45,7 +45,7 @@ export interface Dish {
 /** 菜品分类 */
 export type DishCategory =
   | '热菜'
-  | '凉菜'
+  | '粉面'
   | '面食'
   | '小吃'
   | '水果'
@@ -60,6 +60,8 @@ export interface Review {
   userName: string
   avatar: string
   rating: number
+  speedRating: number
+  valueRating: number
   content: string
   createdAt: string
   likes: number
@@ -79,7 +81,7 @@ export interface User {
 }
 
 /** 排行榜时间范围 */
-export type RankPeriod = 'today' | 'week'
+export type RankPeriod = 'today' | 'week' | 'month'
 
 /** 排行榜分类 */
 export type RankCategory = 'popularity' | 'speed' | 'value'

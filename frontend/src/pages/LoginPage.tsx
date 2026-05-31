@@ -35,6 +35,13 @@ export default function LoginPage() {
           boxShadow: '10px 10px 0 var(--color-shadow-blue)',
         }}
       >
+        <button
+          onClick={() => navigate('/')}
+          className="mb-4 text-sm font-bold flex items-center gap-1"
+          style={{ color: 'var(--color-muted)' }}
+        >
+          ← 返回首页
+        </button>
         <h1 className="text-shadow-pop font-black text-2xl text-center mb-6">登录</h1>
 
         {error && (
