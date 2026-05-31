@@ -135,10 +135,11 @@ export default function ProfilePage() {
     >
       {/* Dark header */}
       <div
-        className="relative px-6 pt-16 pb-20 overflow-hidden"
+        className="relative px-6 pb-20 overflow-hidden"
         style={{
           background: 'var(--color-ink)',
           borderBottom: '5px solid var(--color-ink)',
+          paddingTop: 'max(64px, calc(env(safe-area-inset-top, 0px) + 16px))',
         }}
       >
         <p

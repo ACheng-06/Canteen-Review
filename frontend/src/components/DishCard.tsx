@@ -13,11 +13,37 @@ export default function DishCard({ dish, shadowColor = 'var(--color-shadow-blue)
   return (
     <div
       onClick={() => navigate(`/dishes/${dish.id}`)}
-      className="flex gap-3 p-3 bg-white transition-transform duration-150 active:scale-[0.99] cursor-pointer"
+      className="flex gap-3 p-3 bg-white cursor-pointer"
       style={{
         border: '3px solid var(--color-ink)',
         borderRadius: 'var(--radius-card)',
         boxShadow: `6px 6px 0 ${shadowColor}`,
+        transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
+      }}
+      onMouseDown={(e) => {
+        const el = e.currentTarget
+        el.style.transform = 'scale(0.96)'
+        el.style.boxShadow = `3px 3px 0 ${shadowColor}`
+      }}
+      onMouseUp={(e) => {
+        const el = e.currentTarget
+        el.style.transform = 'scale(1)'
+        el.style.boxShadow = `6px 6px 0 ${shadowColor}`
+      }}
+      onMouseLeave={(e) => {
+        const el = e.currentTarget
+        el.style.transform = 'scale(1)'
+        el.style.boxShadow = `6px 6px 0 ${shadowColor}`
+      }}
+      onTouchStart={(e) => {
+        const el = e.currentTarget
+        el.style.transform = 'scale(0.96)'
+        el.style.boxShadow = `3px 3px 0 ${shadowColor}`
+      }}
+      onTouchEnd={(e) => {
+        const el = e.currentTarget
+        el.style.transform = 'scale(1)'
+        el.style.boxShadow = `6px 6px 0 ${shadowColor}`
       }}
     >
       {/* Image */}

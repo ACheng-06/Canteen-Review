@@ -82,13 +82,14 @@ export default function DishDetailPage() {
   }
 
   return (
-    <div className="min-h-screen -mt-7" style={{ background: 'var(--color-bg)' }}>
+    <div className="min-h-screen" style={{ background: 'var(--color-bg)' }}>
       {/* Header */}
       <div
-        className="p-5  pt-12"
+        className="p-5"
         style={{
           background: 'var(--color-ink)',
           borderBottom: '5px solid var(--color-ink)',
+          paddingTop: 'max(48px, calc(env(safe-area-inset-top, 0px) + 12px))',
         }}
       >
         <div className="flex items-center justify-between mb-3">
