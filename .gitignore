@@ -52,3 +52,9 @@ $RECYCLE.BIN/
 backend/node_modules/
 backend/.env
 backend/dist/
+
+# Claude Code
+.claude/
+.superpowers/
+docs/superpowers/
+CLAUDE.md
