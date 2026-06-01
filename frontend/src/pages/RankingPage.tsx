@@ -160,23 +160,25 @@ export default function RankingPage() {
         })}
       </div>
 
-      {/* Top 3 podium — order: 2nd - 1st - 3rd */}
+      {/* Top 3 podium — order: 2nd - 1st - 3rd, staggered heights */}
       <div className="flex items-end gap-2 mt-5">
         {[1, 0, 2].map((idx) => {
           const dish = top3[idx]
           if (!dish) return null
-          const isFirst = idx === 0
+          const podiumHeights = [280, 220, 180]
+          const h = podiumHeights[idx]
           return (
             <div
               key={dish.id}
               onClick={() => navigate(`/dishes/${dish.id}`)}
-              className="bg-white cursor-pointer"
+              className="bg-white cursor-pointer flex-1 flex flex-col"
               style={{
-                border: '3px solid var(--color-ink)',
+                border: '2px solid var(--color-ink)',
                 borderRadius: '18px',
                 boxShadow: `6px 6px 0 ${rankShadows[idx]}`,
-                flex: isFirst ? '1.3' : '1',
-                padding: isFirst ? '14px 10px' : '10px 8px',
+                height: h,
+                padding: '10px 8px',
+                justifyContent: 'center',
                 transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
               }}
               onMouseDown={(e) => {
@@ -200,37 +202,27 @@ export default function RankingPage() {
                 e.currentTarget.style.boxShadow = `6px 6px 0 ${rankShadows[idx]}`
               }}
             >
-              <div
-                className="text-center mb-1"
-                style={{ fontSize: isFirst ? '28px' : '22px' }}
-              >
+              <div className="text-center mb-1" style={{ fontSize: idx === 0 ? '28px' : '22px' }}>
                 {rankLabels[idx]}
               </div>
               <div
-                className="w-full flex items-center justify-center mb-2"
+                className="w-full mb-2 overflow-hidden"
                 style={{
-                  background: getCategoryVisual(dish.category).bg,
+                  aspectRatio: '1 / 1',
                   borderRadius: '14px',
                   border: '2px solid var(--color-ink)',
-                  height: isFirst ? '80px' : '56px',
-                  fontSize: isFirst ? '36px' : '28px',
                 }}
               >
-                {getCategoryVisual(dish.category).emoji}
+                <img
+                  src={getCategoryVisual(dish.category).foodImage}
+                  alt={dish.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
-              <div
-                className="font-black text-center truncate"
-                style={{ fontSize: isFirst ? '15px' : '13px' }}
-              >
+              <div className="font-black text-center truncate" style={{ fontSize: '13px' }}>
                 {dish.name}
               </div>
-              <div
-                className="text-center mt-0.5"
-                style={{
-                  color: 'var(--color-muted)',
-                  fontSize: isFirst ? '13px' : '11px',
-                }}
-              >
+              <div className="text-center mt-0.5" style={{ color: 'var(--color-muted)', fontSize: '11px' }}>
                 {category === 'popularity'
                   ? `人气 ${dish.popularity}`
                   : category === 'speed'
@@ -266,7 +258,7 @@ export default function RankingPage() {
         <div
           className="mt-4 overflow-hidden"
           style={{
-            border: '3px solid var(--color-ink)',
+            border: '2px solid var(--color-ink)',
             borderRadius: '20px',
             boxShadow: '5px 5px 0 var(--color-shadow-blue)',
             background: 'white',

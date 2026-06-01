@@ -58,3 +58,4 @@ backend/prisma/seed.ts
 .claude/
 .superpowers/
 docs/
+.gstack/

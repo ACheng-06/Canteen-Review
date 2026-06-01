@@ -17,7 +17,7 @@ export default function DishCard({ dish, shadowColor = 'var(--color-shadow-blue)
       onClick={() => navigate(`/dishes/${dish.id}`)}
       className="flex gap-3 p-3 bg-white cursor-pointer"
       style={{
-        border: '3px solid var(--color-ink)',
+        border: '2px solid var(--color-ink)',
         borderRadius: 'var(--radius-card)',
         boxShadow: `6px 6px 0 ${shadowColor}`,
         transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
@@ -49,16 +49,12 @@ export default function DishCard({ dish, shadowColor = 'var(--color-shadow-blue)
       }}
     >
       {/* Image */}
-      <div
-        className="w-[72px] h-[72px] flex-shrink-0 flex items-center justify-center text-4xl"
-        style={{
-          background: visual.bg,
-          borderRadius: '16px',
-          border: '2px solid var(--color-ink)',
-        }}
-      >
-        {visual.emoji}
-      </div>
+      <img
+        src={visual.foodImage}
+        alt={dish.name}
+        className="w-[72px] h-[72px] flex-shrink-0 object-cover"
+        style={{ borderRadius: '16px', border: '1.5px solid #d1d5db' }}
+      />
 
       {/* Info */}
       <div className="flex-1 min-w-0">

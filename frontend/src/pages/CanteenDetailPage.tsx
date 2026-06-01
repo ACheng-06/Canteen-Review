@@ -121,7 +121,7 @@ export default function CanteenDetailPage() {
               <div
                 className="p-4 bg-white"
                 style={{
-                  border: '3px solid var(--color-ink)',
+                  border: '2px solid var(--color-ink)',
                   borderRadius: '22px',
                   boxShadow: `6px 6px 0 ${shadowColors[winIdx % 3]}`,
                 }}

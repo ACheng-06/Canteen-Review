@@ -7,24 +7,24 @@ import { useAuthStore } from '../stores/useAuthStore'
 import { getCategoryVisual } from '../utils/categoryVisual'
 import type { DishCategory } from '../types'
 
-const categories: { label: string; emoji: string; value: DishCategory | 'all' }[] = [
-  { label: '全部', emoji: '🍽️', value: 'all' },
-  { label: '热菜', emoji: '🍲', value: '热菜' },
-  { label: '粉面', emoji: '🍜', value: '粉面' },
-  { label: '面食', emoji: '🌾', value: '面食' },
-  { label: '小吃', emoji: '🍢', value: '小吃' },
-  { label: '水果', emoji: '🍉', value: '水果' },
-  { label: '饮品', emoji: '🧋', value: '饮品' },
-  { label: '甜品', emoji: '🍰', value: '甜品' },
+const categories: { label: string; image: string; value: DishCategory | 'all' }[] = [
+  { label: '全部', image: '/images/categories/all.jpg', value: 'all' },
+  { label: '热菜', image: '/images/categories/hot.jpg', value: '热菜' },
+  { label: '粉面', image: '/images/categories/pasta.jpg', value: '粉面' },
+  { label: '面食', image: '/images/categories/noodle.jpg', value: '面食' },
+  { label: '小吃', image: '/images/categories/snack.jpg', value: '小吃' },
+  { label: '水果', image: '/images/categories/fruit.jpg', value: '水果' },
+  { label: '饮品', image: '/images/categories/drink.jpg', value: '饮品' },
+  { label: '甜品', image: '/images/categories/dessert.jpg', value: '甜品' },
 ]
 
 const announcements = [
   '📢 欢迎使用「华航小助手APP」！感谢你成为我们的首批用户，你的每一次评价都在让我们变得更好！',
   '🎉 目前仍在持续完善中，部分功能可能存在不足，感谢你的理解与包容。',
-  '⏰ 💬 遇到问题或有好的建议？欢迎随时反馈，我们会认真对待每一条意见。',
+  '💬 遇到问题或有好的建议？欢迎随时反馈，我们会认真对待每一条意见。',
 ]
 
-const hotSearches = ['麻辣烫', '黄焖鸡', '奶茶', '炒饭', '拉面', '炸鸡']
+const hotSearches = ['麻辣烫', '烤鸭', '奶茶', '炒饭', '拉面', '炸鸡']
 
 function getGreeting(): { emoji: string; text: string } {
   const h = new Date().getHours()
@@ -248,7 +248,7 @@ export default function HomePage() {
 
           {/* 搜索框 */}
           <div ref={searchRef} className="relative mt-4">
-            <div className="flex items-center gap-2 px-3 py-2" style={{ background: 'var(--color-bg)', border: '3px solid var(--color-ink)', borderRadius: '20px' }}>
+            <div className="flex items-center gap-2 px-3 py-2" style={{ background: 'var(--color-bg)', border: '2px solid var(--color-ink)', borderRadius: '20px' }}>
               <span>🔍</span>
               <input
                 type="text"
@@ -295,7 +295,7 @@ export default function HomePage() {
           </div>
 
           {/* 统计 */}
-          <div className="flex items-center justify-around mt-4 py-3 px-2" style={{ border: '3px solid var(--color-ink)', borderRadius: '20px', background: 'white' }}>
+          <div className="flex items-center justify-around mt-4 py-3 px-2" style={{ border: '2px solid var(--color-ink)', borderRadius: '20px', background: 'white' }}>
             <div className="text-center"><div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>{canteens.length}</div><div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>食堂</div></div>
             <div className="text-center"><div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>{totalWindows}</div><div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>窗口</div></div>
             <div className="text-center"><div className="text-xl font-black" style={{ color: 'var(--color-blue)' }}>{totalReviews}</div><div className="text-[10px] font-bold" style={{ color: 'var(--color-muted)' }}>评价</div></div>
@@ -314,12 +314,12 @@ export default function HomePage() {
               className="flex flex-col items-center gap-1 py-3 transition-transform duration-150 active:scale-[0.95]"
               style={{
                 background: selectedCategory === cat.value ? 'var(--color-soft-amber)' : 'white',
-                border: '3px solid var(--color-ink)',
+                border: '2px solid var(--color-ink)', 
                 borderRadius: '20px',
                 boxShadow: selectedCategory === cat.value ? '5px 5px 0 var(--color-amber)' : '5px 5px 0 var(--color-shadow-blue)',
               }}
             >
-              <span className="text-xl">{cat.emoji}</span>
+              <img src={cat.image} alt={cat.label} className="w-16 h-16 object-cover rounded-lg border-[1.5px] border-gray-300" />
               <span className="text-[11px] font-bold">{cat.label}</span>
             </button>
           ))}
@@ -337,14 +337,16 @@ export default function HomePage() {
               key={dish.id}
               onClick={() => navigate(`/dishes/${dish.id}`)}
               className="flex-shrink-0 w-[140px] p-3 bg-white cursor-pointer"
-              style={{ border: '3px solid var(--color-ink)', borderRadius: '22px', boxShadow: '7px 7px 0 var(--color-shadow-blue)', transition: `transform 0.2s ${spring}, box-shadow 0.2s ease` }}
+              style={{ border: '2px solid var(--color-ink)', borderRadius: '22px', boxShadow: '7px 7px 0 var(--color-shadow-blue)', transition: `transform 0.2s ${spring}, box-shadow 0.2s ease` }}
               onMouseDown={(e) => pressDown(e.currentTarget)}
               onMouseUp={(e) => pressUp(e.currentTarget)}
               onMouseLeave={(e) => pressUp(e.currentTarget)}
               onTouchStart={(e) => pressDown(e.currentTarget)}
               onTouchEnd={(e) => pressUp(e.currentTarget)}
             >
-              <div className="w-full h-20 flex items-center justify-center text-4xl mb-2" style={{ background: v.bg, borderRadius: '16px', border: '2px solid var(--color-ink)' }}>{v.emoji}</div>
+              <div className="w-full mb-2 overflow-hidden" style={{ aspectRatio: '1 / 1', borderRadius: '16px', border: '1.5px solid #d1d5db' }}>
+                <img src={v.foodImage} alt={dish.name} className="w-full h-full object-cover" />
+              </div>
               <div className="font-black text-sm truncate">{dish.name}</div>
               <div className="text-xs mt-0.5" style={{ color: 'var(--color-muted)' }}>⭐ {dish.rating.toFixed(1)} · ¥{dish.price}</div>
             </div>
@@ -375,12 +377,12 @@ export default function HomePage() {
 
             {/* 空状态 */}
             {filteredDishes.length === 0 && (
-              <div className="text-center py-10 px-4" style={{ border: '3px solid var(--color-ink)', borderRadius: '22px', background: 'white', boxShadow: '7px 7px 0 var(--color-shadow-blue)' }}>
+              <div className="text-center py-10 px-4" style={{ border: '2px solid var(--color-ink)', borderRadius: '22px', background: 'white', boxShadow: '7px 7px 0 var(--color-shadow-blue)' }}>
                 <div className="text-5xl mb-3">🍽️</div>
                 <p className="font-black text-base mb-1" style={{ color: 'var(--color-ink)' }}>没有找到相关菜品</p>
                 <p className="text-xs mb-4" style={{ color: 'var(--color-muted)' }}>换个关键词或分类试试？</p>
                 {hasActiveSearch && (
-                  <button onClick={clearSearch} className="px-5 py-2 text-xs font-black transition-transform duration-150 active:scale-[0.95]" style={{ background: 'var(--color-ink)', color: 'white', border: '3px solid var(--color-ink)', borderRadius: '14px', boxShadow: '4px 4px 0 var(--color-shadow-blue)' }}>清除筛选</button>
+                  <button onClick={clearSearch} className="px-5 py-2 text-xs font-black transition-transform duration-150 active:scale-[0.95]" style={{ background: 'var(--color-ink)', color: 'white', border: '2px solid var(--color-ink)', borderRadius: '14px', boxShadow: '4px 4px 0 var(--color-shadow-blue)' }}>清除筛选</button>
                 )}
               </div>
             )}
@@ -388,9 +390,9 @@ export default function HomePage() {
             {/* 分页 */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-3 mt-4">
-                <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.95] disabled:opacity-40" style={{ background: 'var(--color-ink)', color: 'white', border: '3px solid var(--color-ink)', borderRadius: '14px', boxShadow: '4px 4px 0 var(--color-shadow-blue)' }}>上一页</button>
+                <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.95] disabled:opacity-40" style={{ background: 'var(--color-ink)', color: 'white', border: '2px solid var(--color-ink)', borderRadius: '14px', boxShadow: '4px 4px 0 var(--color-shadow-blue)' }}>上一页</button>
                 <span className="text-sm font-bold" style={{ color: 'var(--color-muted)' }}>{page} / {totalPages}</span>
-                <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.95] disabled:opacity-40" style={{ background: 'var(--color-ink)', color: 'white', border: '3px solid var(--color-ink)', borderRadius: '14px', boxShadow: '4px 4px 0 var(--color-shadow-blue)' }}>下一页</button>
+                <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="px-4 py-2 text-sm font-black transition-transform duration-150 active:scale-[0.95] disabled:opacity-40" style={{ background: 'var(--color-ink)', color: 'white', border: '2px solid var(--color-ink)', borderRadius: '14px', boxShadow: '4px 4px 0 var(--color-shadow-blue)' }}>下一页</button>
               </div>
             )}
           </div>

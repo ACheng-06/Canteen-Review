@@ -1,21 +1,21 @@
 interface CategoryVisual {
-  bg: string
-  emoji: string
+  categoryImage: string
+  foodImage: string
 }
 
 const categoryMap: Record<string, CategoryVisual> = {
-  '热菜': { bg: 'linear-gradient(135deg, #FFE5E5 0%, #FFC1C1 100%)', emoji: '🍲' },
-  '面食': { bg: 'linear-gradient(135deg, #FFF5E5 0%, #FFE0B2 100%)', emoji: '🌾' },
-  '粉面': { bg: 'linear-gradient(135deg, #FFF0E0 0%, #FFDAB0 100%)', emoji: '🍜' },
-  '小吃': { bg: 'linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%)', emoji: '🍢' },
-  '饮品': { bg: 'linear-gradient(135deg, #FFE5EC 0%, #FFCDD2 100%)', emoji: '🧋' },
-  '水果': { bg: 'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)', emoji: '🍉' },
-  '甜品': { bg: 'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)', emoji: '🍰' },
+  '热菜': { categoryImage: '/images/categories/hot.jpg', foodImage: '/images/food/hot.jpg' },
+  '面食': { categoryImage: '/images/categories/noodle.jpg', foodImage: '/images/food/noodle.jpg' },
+  '粉面': { categoryImage: '/images/categories/pasta.jpg', foodImage: '/images/food/pasta.jpg' },
+  '小吃': { categoryImage: '/images/categories/snack.jpg', foodImage: '/images/food/snack.jpg' },
+  '饮品': { categoryImage: '/images/categories/drink.jpg', foodImage: '/images/food/drink.jpg' },
+  '水果': { categoryImage: '/images/categories/fruit.jpg', foodImage: '/images/food/fruit.jpg' },
+  '甜品': { categoryImage: '/images/categories/dessert.jpg', foodImage: '/images/food/dessert.jpg' },
 }
 
 const defaultVisual: CategoryVisual = {
-  bg: 'linear-gradient(135deg, #F5F5F5 0%, #E0E0E0 100%)',
-  emoji: '🍽️',
+  categoryImage: '/images/categories/all.jpg',
+  foodImage: '/images/food/hot.jpg',
 }
 
 export function getCategoryVisual(category: string): CategoryVisual {

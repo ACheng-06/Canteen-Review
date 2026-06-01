@@ -102,7 +102,6 @@ canteen-review/
 │   │   ├── api/          # API 请求封装
 │   │   ├── components/   # 可复用组件
 │   │   ├── layouts/      # 布局组件
-│   │   ├── mock/         # 测试用 mock 数据 ⚠️
 │   │   ├── pages/        # 页面组件
 │   │   ├── router/       # 路由配置
 │   │   ├── stores/       # Zustand 状态管理
@@ -119,8 +118,6 @@ canteen-review/
 │   └── package.json
 └── README.md
 ```
-
-> ⚠️ **注意**: `frontend/src/mock/` 目录包含测试用的 mock 数据，仅用于开发调试，不包含在生产环境中。
 
 ## 🎨 设计风格
 
@@ -217,7 +214,7 @@ npx prisma migrate dev  # 运行数据库迁移
 
 ## 👨‍💻 作者
 
-- **JinCheng-06** - [GitHub](https://github.com/JinCheng-06)
+- **ACheng-06** - [GitHub](https://github.com/ACheng-06)
 
 ## 🙏 致谢
 

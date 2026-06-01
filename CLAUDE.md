@@ -151,3 +151,49 @@ cd backend && npx tsc --noEmit
 3. **文档同步** - 重大变更需更新文档
 4. **安全第一** - 敏感信息不提交 git
 5. **用户确认** - 重大决策需要用户同意
+
+## gstack 技能
+
+使用 `.claude/skills/gstack/` 中的技能进行网页浏览，不要使用 mcp__claude-in-chrome__* 工具。
+
+### 可用技能
+
+| 技能 | 用途 |
+|------|------|
+| `/office-hours` | YC Office Hours — 产品诊断和头脑风暴 |
+| `/plan-ceo-review` | CEO 视角的计划审查 |
+| `/plan-eng-review` | 工程经理视角的架构审查 |
+| `/plan-design-review` | 高级设计师视角的设计审查 |
+| `/design-consultation` | 从零构建设计系统 |
+| `/design-shotgun` | 视觉设计探索，生成多个变体 |
+| `/design-html` | 将 mockup 转为生产级 HTML |
+| `/review` | 代码审查，查找生产 bug |
+| `/ship` | 同步、测试、推送、开 PR |
+| `/land-and-deploy` | 合并 PR、部署、验证生产环境 |
+| `/qa` | QA 测试，找 bug 并修复 |
+| `/qa-only` | QA 报告，只报告不修复 |
+| `/cso` | OWASP Top 10 + STRIDE 安全审计 |
+| `/investigate` | 系统化根因调试 |
+| `/retro` | 工程回顾 |
+| `/browse` | 无头浏览器测试 |
+| `/benchmark` | 性能回归检测 |
+| `/canary` | 部署后监控 |
+
+## Skill routing
+
+When the user's request matches an available skill, invoke it via the Skill tool. When in doubt, invoke the skill.
+
+Key routing rules:
+- Product ideas/brainstorming → invoke /office-hours
+- Strategy/scope → invoke /plan-ceo-review
+- Architecture → invoke /plan-eng-review
+- Design system/plan review → invoke /design-consultation or /plan-design-review
+- Full review pipeline → invoke /autoplan
+- Bugs/errors → invoke /investigate
+- QA/testing site behavior → invoke /qa or /qa-only
+- Code review/diff check → invoke /review
+- Visual polish → invoke /design-review
+- Ship/deploy/PR → invoke /ship or /land-and-deploy
+- Save progress → invoke /context-save
+- Resume context → invoke /context-restore
+- Author a backlog-ready spec/issue → invoke /spec

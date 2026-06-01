@@ -20,7 +20,6 @@ frontend/src/
 ├── assets/       # 静态资源
 ├── components/   # 可复用组件（DishCard, CanteenCard, StarRating, ReviewForm 等）
 ├── layouts/      # 布局组件（MainLayout 含底部导航）
-├── mock/         # 已废弃的 mock 数据
 ├── pages/        # 页面组件（HomePage, ProfilePage, DishDetailPage 等）
 ├── router/       # 路由配置
 ├── stores/       # Zustand store

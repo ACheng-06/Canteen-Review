@@ -112,16 +112,12 @@ export default function DishDetailPage() {
           </button>
         </div>
 
-        <div
-          className="w-20 h-20 mx-auto flex items-center justify-center text-4xl mb-3"
-          style={{
-            background: getCategoryVisual(dish.category).bg,
-            borderRadius: '24px',
-            border: '3px solid rgba(255,255,255,0.3)',
-          }}
-        >
-          {getCategoryVisual(dish.category).emoji}
-        </div>
+        <img
+          src={getCategoryVisual(dish.category).foodImage}
+          alt={dish.name}
+          className="w-20 h-20 mx-auto object-cover mb-3"
+          style={{ borderRadius: '24px', border: '3px solid rgba(255,255,255,0.3)' }}
+        />
 
         <h1 className="text-white text-xl font-black text-center">{dish.name}</h1>
         <p
@@ -163,7 +159,7 @@ export default function DishDetailPage() {
         <div
           className="p-4 bg-white mb-4"
           style={{
-            border: '3px solid var(--color-ink)',
+            border: '2px solid var(--color-ink)',
             borderRadius: '22px',
             boxShadow: '7px 7px 0 var(--color-shadow-blue)',
           }}
@@ -216,7 +212,7 @@ export default function DishDetailPage() {
             <div
               className="p-4 bg-white text-center"
               style={{
-                border: '3px solid var(--color-ink)',
+                border: '2px solid var(--color-ink)',
                 borderRadius: '22px',
                 boxShadow: '7px 7px 0 var(--color-shadow-amber)',
               }}

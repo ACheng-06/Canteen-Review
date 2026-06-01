@@ -75,7 +75,7 @@ export default function WelcomeModal() {
         >
           <p className="text-2xl mb-1">🎉</p>
           <h2 className="font-black text-lg" style={{ color: 'var(--color-ink)' }}>
-            欢迎来到食堂点评
+            欢迎来到华航小助手
           </h2>
           <p className="text-xs mt-1" style={{ color: 'var(--color-muted)' }}>
             使用前请先了解以下信息

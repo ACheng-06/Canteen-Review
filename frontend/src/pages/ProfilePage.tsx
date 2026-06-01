@@ -113,7 +113,7 @@ export default function ProfilePage() {
             style={{
               background: 'var(--color-ink)',
               borderRadius: '16px',
-              border: '3px solid var(--color-ink)',
+              border: '2px solid var(--color-ink)',
               boxShadow: '5px 5px 0 var(--color-pink)',
             }}
           >
@@ -143,18 +143,25 @@ export default function ProfilePage() {
       className=""
       style={{ background: 'var(--color-paper)' }}
     >
-      {/* Dark header */}
+      {/* Background header with image */}
       <div
         className="relative px-6 pb-20 overflow-hidden"
         style={{
-          background: 'var(--color-ink)',
+          backgroundImage: 'url(/images/background.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           borderBottom: '5px solid var(--color-ink)',
           paddingTop: 'max(64px, calc(env(safe-area-inset-top, 0px) + 16px))',
         }}
       >
+        {/* Overlay for better text readability */}
+        <div 
+          className="absolute inset-0"
+          style={{ backgroundColor: 'rgba(89, 89, 89, 0)' }}
+        />
         <p
           className="text-xs font-bold mb-2"
-          style={{ color: 'rgba(255,255,255,0.5)' }}
+          style={{ color: 'rgba(255, 255, 255, 0.84)' }}
         >
           校园生活账号
         </p>
@@ -318,7 +325,7 @@ export default function ProfilePage() {
                   className="flex-1 py-2.5 text-sm font-bold text-white transition-transform duration-150 active:scale-[0.97] disabled:opacity-50"
                   style={{
                     background: 'var(--color-ink)',
-                    border: '3px solid var(--color-ink)',
+                    border: '2px solid var(--color-ink)',
                     borderRadius: '14px',
                     boxShadow: '3px 3px 0 var(--color-shadow-blue)',
                   }}
@@ -335,7 +342,7 @@ export default function ProfilePage() {
           className="flex items-center justify-around mt-4 py-3"
           style={{
             background: 'var(--color-soft-amber)',
-            border: '3px solid var(--color-ink)',
+            border: '2px solid var(--color-ink)',
             borderRadius: '22px',
             boxShadow: '7px 7px 0 var(--color-yellow)',
           }}
@@ -381,7 +388,7 @@ export default function ProfilePage() {
               key={item.label + item.action}
               className="flex flex-col items-center gap-2 py-3 bg-white cursor-pointer transition-transform duration-150 active:scale-[0.97]"
               style={{
-                border: '3px solid var(--color-ink)',
+                border: '2px solid var(--color-ink)',
                 borderRadius: '22px',
                 boxShadow: '6px 6px 0 var(--color-shadow-amber)',
               }}
@@ -415,7 +422,7 @@ export default function ProfilePage() {
           <div
             className="bg-white overflow-hidden transition-transform duration-150 active:scale-[0.98]"
             style={{
-              border: '3px solid var(--color-ink)',
+              border: '2px solid var(--color-ink)',
               borderRadius: '22px',
               boxShadow: '6px 6px 0 var(--color-shadow-blue)',
             }}
@@ -459,7 +466,7 @@ export default function ProfilePage() {
                         onClick={() => navigate(`/dishes/${dish.id}`)}
                         className="flex items-center gap-3 p-3 bg-white cursor-pointer"
                         style={{
-                          border: '3px solid var(--color-ink)',
+                          border: '2px solid var(--color-ink)',
                           borderRadius: '20px',
                           boxShadow: '5px 5px 0 var(--color-shadow-blue)',
                           transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
@@ -470,7 +477,7 @@ export default function ProfilePage() {
                         onTouchStart={(e) => { e.currentTarget.style.transform = 'scale(0.96)'; e.currentTarget.style.boxShadow = '2px 2px 0 var(--color-shadow-blue)' }}
                         onTouchEnd={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '5px 5px 0 var(--color-shadow-blue)' }}
                       >
-                        <div className="w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0" style={{ background: getCategoryVisual(dish.category).bg, borderRadius: '12px', border: '2px solid var(--color-ink)' }}>{getCategoryVisual(dish.category).emoji}</div>
+                        <img src={getCategoryVisual(dish.category).foodImage} alt={dish.name} className="w-12 h-12 object-cover flex-shrink-0" style={{ borderRadius: '12px', border: '2px solid var(--color-ink)' }} />
                         <div className="flex-1 min-w-0">
                           <div className="font-bold text-sm truncate">{dish.name}</div>
                           <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
@@ -496,7 +503,7 @@ export default function ProfilePage() {
           <div
             className="bg-white overflow-hidden transition-transform duration-150 active:scale-[0.98]"
             style={{
-              border: '3px solid var(--color-ink)',
+              border: '2px solid var(--color-ink)',
               borderRadius: '22px',
               boxShadow: '6px 6px 0 var(--color-shadow-green)',
             }}
@@ -540,7 +547,7 @@ export default function ProfilePage() {
                         onClick={() => navigate(`/dishes/${dish.id}`)}
                         className="flex items-center gap-3 p-3 bg-white cursor-pointer"
                         style={{
-                          border: '3px solid var(--color-ink)',
+                          border: '2px solid var(--color-ink)',
                           borderRadius: '20px',
                           boxShadow: '5px 5px 0 var(--color-shadow-green)',
                           transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
@@ -551,7 +558,7 @@ export default function ProfilePage() {
                         onTouchStart={(e) => { e.currentTarget.style.transform = 'scale(0.96)'; e.currentTarget.style.boxShadow = '2px 2px 0 var(--color-shadow-green)' }}
                         onTouchEnd={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '5px 5px 0 var(--color-shadow-green)' }}
                       >
-                        <div className="w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0" style={{ background: getCategoryVisual(dish.category).bg, borderRadius: '12px', border: '2px solid var(--color-ink)' }}>{getCategoryVisual(dish.category).emoji}</div>
+                        <img src={getCategoryVisual(dish.category).foodImage} alt={dish.name} className="w-12 h-12 object-cover flex-shrink-0" style={{ borderRadius: '12px', border: '2px solid var(--color-ink)' }} />
                         <div className="flex-1 min-w-0">
                           <div className="font-bold text-sm truncate">{dish.name}</div>
                           <div className="text-xs" style={{ color: 'var(--color-muted)' }}>
@@ -584,7 +591,7 @@ export default function ProfilePage() {
           <div
             className="bg-white overflow-hidden transition-transform duration-150 active:scale-[0.98]"
             style={{
-              border: '3px solid var(--color-ink)',
+              border: '2px solid var(--color-ink)',
               borderRadius: '22px',
               boxShadow: '6px 6px 0 var(--color-shadow-amber)',
             }}
@@ -634,7 +641,7 @@ export default function ProfilePage() {
                         key={review.id}
                         className="p-3 bg-white cursor-pointer"
                         style={{
-                          border: '3px solid var(--color-ink)',
+                          border: '2px solid var(--color-ink)',
                           borderRadius: '20px',
                           boxShadow: '5px 5px 0 var(--color-shadow-amber)',
                           transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease',
@@ -700,7 +707,7 @@ export default function ProfilePage() {
           <div
             className="text-center py-6 text-sm bg-white"
             style={{
-              border: '3px solid var(--color-ink)',
+              border: '2px solid var(--color-ink)',
               borderRadius: '22px',
               boxShadow: '6px 6px 0 var(--color-shadow-amber)',
               color: 'var(--color-muted)',
@@ -719,7 +726,7 @@ export default function ProfilePage() {
           style={{
             background: 'white',
             color: 'var(--color-ink)',
-            border: '3px solid var(--color-ink)',
+            border: '2px solid var(--color-ink)',
             borderRadius: '22px',
             boxShadow: '6px 6px 0 var(--color-shadow-amber)',
           }}
