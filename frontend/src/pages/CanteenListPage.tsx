@@ -15,10 +15,9 @@ export default function CanteenListPage() {
   }, [])
 
   return (
-    <div
-      className="px-4 pb-[120px]"
-      style={{ background: 'var(--color-paper)' }}
-    >
+    <div style={{ background: 'var(--color-paper)' }}>
+      <div className="safe-area-top" />
+      <div className="px-4 pb-[120px]">
       {/* Hero */}
       <div
         className="relative mt-4 p-5 overflow-hidden"
@@ -50,6 +49,7 @@ export default function CanteenListPage() {
           ))}
         </div>
       )}
+      </div>
     </div>
   )
 }

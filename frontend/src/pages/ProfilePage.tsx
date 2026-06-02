@@ -394,7 +394,7 @@ export default function ProfilePage() {
               }}
               onClick={() => {
                 if (item.action === 'feedback') {
-                  alert('意见反馈请联系 QQ：2011024577')
+                  alert('意见反馈请联系 QQ群：542366692')
                 } else {
                   alert('该功能暂未开放，敬请期待')
                 }
